@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<style>
+body{margin:0;background:#eeece6;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.dv-turn{padding:40px 44px 60px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 14px/1.2 -apple-system,sans-serif;color:#1a1a1a}
+.dv-tnote{font:400 12.5px/1.5 -apple-system,sans-serif;color:rgba(0,0,0,.55);max-width:760px;margin:6px 0 26px}
+.dv-opts{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.4 -apple-system,sans-serif;color:rgba(0,0,0,.6);max-width:1200px}
+.dv-olabel b{color:#111}
+.dv-phones{display:flex;gap:22px;align-items:flex-start}
+.dv-phone-lbl{font:600 11px sans-serif;color:rgba(0,0,0,.5);text-align:center;margin-top:8px}
+.dv-opt:target .dv-oid{background:#178f7c;color:#fff}
+.dv-next{margin:30px 0 0;font:12px/1.6 -apple-system,sans-serif;color:rgba(0,0,0,.5);max-width:900px}
+.mtabbar{display:flex;flex:none;border-top:1px solid #1c2023;background:#0a0c0d;padding:8px 0 10px}
+.mtab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.mtablabel{font:600 10px sans-serif}
+.mscroll{flex:1;overflow:auto;background:#0e1113}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Splash</span></div>
+<p class="dv-tnote">Pantalla de arranque, iOS.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Splash</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e1113;padding-top:40px">
+    <div style="font:800 34px sans-serif;color:#fff;letter-spacing:-1px">aluri<span style="color:#3ddbb8">.</span></div>
+    <div style="font:400 13px sans-serif;color:#727b81;margin-top:10px">Créditos con garantía inmobiliaria</div>
+    <div style="width:120px;height:3px;border-radius:2px;background:#202427;overflow:hidden;margin-top:40px"><div style="width:60%;height:100%;background:#3ddbb8"></div></div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Splash</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Login → Registro (flujo horizontal)</span></div>
+<p class="dv-tnote">2a Login → 2b elegir tipo de usuario (inversionista o deudor) → 2c crear cuenta con los datos obligatorios (nombre, cédula, email, teléfono, ciudad — dirección queda opcional, el resto de datos adicionales se completan luego en Perfil).</p>
+<div class="dv-opts">
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Login</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" keyboard="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:64px 22px 30px;box-sizing:border-box">
+    <div style="align-self:flex-start;font:600 11px sans-serif;color:#7fe8cf;background:#182220;padding:5px 12px;border-radius:20px;margin-bottom:18px">Portal para inversionistas</div>
+    <div style="font:800 26px sans-serif;color:#fff;margin-bottom:4px">Bienvenido de nuevo</div>
+    <div style="font:400 13.5px sans-serif;color:#727b81;margin-bottom:26px">Ingresa a tu cuenta</div>
+
+    <div style="font:500 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:6px">Correo electrónico</div>
+    <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:12px;padding:14px 16px;font:400 14px sans-serif;color:#e7eaec;margin-bottom:16px">inversor@ejemplo.com</div>
+
+    <div style="font:500 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:6px">Contraseña</div>
+    <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:14px 16px;font:400 14px sans-serif;color:#e7eaec;margin-bottom:22px">••••••••••</div>
+
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center;margin-bottom:18px">Ingresar</div>
+    <div style="font:500 13px sans-serif;color:#7fe8cf;text-align:center;margin-bottom:26px">¿Olvidaste tu contraseña?</div>
+
+    <div style="height:1px;background:#202427;margin-bottom:20px"></div>
+    <div style="font:400 13px sans-serif;color:#727b81;text-align:center;margin-bottom:6px">¿Nuevo en aluri?</div>
+    <div style="font:600 13.5px sans-serif;color:#3ddbb8;text-align:center">Crear una cuenta nueva</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Login</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>¿Eres inversionista o deudor?</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:70px 22px 30px;box-sizing:border-box">
+    <div style="font:800 24px sans-serif;color:#fff;margin-bottom:6px">Regístrate en aluri</div>
+    <div style="font:400 13.5px sans-serif;color:#727b81;margin-bottom:30px">Cuéntanos qué te trae — así te llevamos al lugar correcto.</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:16px;padding:20px 20px">
+        <div style="width:38px;height:38px;border-radius:11px;background:#182220;display:flex;align-items:center;justify-content:center;font:700 13px sans-serif;color:#3ddbb8;margin-bottom:12px">$</div>
+        <div style="font:700 16px sans-serif;color:#fff;margin-bottom:4px">Quiero invertir</div>
+        <div style="font:400 12px sans-serif;color:#727b81">Soy inversionista y quiero prestar dinero con garantía inmobiliaria.</div>
+      </div>
+      <div style="background:#15181b;border:1px solid #202427;border-radius:16px;padding:20px 20px">
+        <div style="width:38px;height:38px;border-radius:11px;background:#202427;display:flex;align-items:center;justify-content:center;font:700 13px sans-serif;color:#a9a297;margin-bottom:12px">🏠</div>
+        <div style="font:700 16px sans-serif;color:#fff;margin-bottom:4px">Necesito un crédito</div>
+        <div style="font:400 12px sans-serif;color:#727b81">Soy propietario y quiero un crédito con garantía sobre mi inmueble.</div>
+      </div>
+    </div>
+
+    <div style="flex:1"></div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center;margin-top:24px">Continuar como inversionista</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Tipo de usuario</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Crear cuenta — datos obligatorios</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" keyboard="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 22px 30px;box-sizing:border-box">
+    <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:12px">‹ ¿Inversionista o deudor?</div>
+    <div style="font:800 22px sans-serif;color:#fff;margin-bottom:2px">Crea tu cuenta</div>
+    <div style="font:400 12.5px sans-serif;color:#727b81;margin-bottom:20px">Solo lo esencial para empezar — el resto lo completas luego en tu Perfil.</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Nombre completo</div>
+        <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">Hugo José Borja Vives</div>
+      </div>
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Cédula</div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">CC 1018512472</div>
+      </div>
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Correo electrónico</div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">hugojborjavives@gmail.com</div>
+      </div>
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Teléfono</div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">315 266 2035</div>
+      </div>
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Ciudad</div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">Barranquilla</div>
+      </div>
+      <div>
+        <div style="font:500 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Contraseña</div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:12px 14px;font:400 13.5px sans-serif;color:#e7eaec">••••••••••</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:9px;margin:18px 0">
+      <div style="width:15px;height:15px;border:1px solid #33383b;border-radius:4px;flex:none;margin-top:1px"></div>
+      <div style="font:400 11.5px sans-serif;color:#727b81;line-height:1.5">Acepto los <span style="color:#3ddbb8">Términos y condiciones</span> y la <span style="color:#3ddbb8">Política de tratamiento de datos</span>.</div>
+    </div>
+
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Crear cuenta</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Crear cuenta</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="2d">
+<div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Cuenta creada — celebración</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e1113;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:14px 14px;padding:0 30px;text-align:center">
+    <div style="width:72px;height:72px;border-radius:50%;background:radial-gradient(circle,rgba(61,219,184,.35),transparent 70%);display:flex;align-items:center;justify-content:center;margin-bottom:20px">
+      <div style="width:52px;height:52px;border-radius:50%;background:#182220;border:1.5px solid #3ddbb8;display:flex;align-items:center;justify-content:center;font:800 22px sans-serif;color:#3ddbb8">✓</div>
+    </div>
+    <div style="font:800 24px sans-serif;color:#fff;margin-bottom:8px">¡Listo, Hugo!</div>
+    <div style="font:400 14px sans-serif;color:#a9a297;line-height:1.6;margin-bottom:34px">Ya eres parte de aluri. Es momento de conocer oportunidades reales de inversión con garantía inmobiliaria.</div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px 36px;border-radius:13px;width:100%;box-sizing:border-box">Conocer oportunidades</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Cuenta creada</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Inicio (dashboard) — tour para nuevos, vacío, y con portafolio</span></div>
+<p class="dv-tnote">3a-3c: tour de 3 pasos para quien nunca ha invertido (marketplace → dashboard → perfil). 3d: dashboard vacío con el siguiente paso claro. 3e: dashboard con portafolio activo (versión original). Tab bar inferior: Inicio, Marketplace, Inversiones, Perfil.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Tour 1/3 — el marketplace</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 24px 40px;box-sizing:border-box">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div class="stripe-ph" style="width:100%;height:170px;border-radius:16px;color:#5a6167;margin-bottom:28px">ilustración marketplace</div>
+      <div style="font:800 20px sans-serif;color:#fff;margin-bottom:8px">Elige dónde invertir</div>
+      <div style="font:400 13px sans-serif;color:#a9a297;line-height:1.6">En el Marketplace vas a encontrar créditos reales con garantía inmobiliaria. Tú decides cuál y cuánto.</div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:18px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#3ddbb8"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+    </div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Siguiente</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Tour · Marketplace</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Tour 2/3 — tu dashboard</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 24px 40px;box-sizing:border-box">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div class="stripe-ph" style="width:100%;height:170px;border-radius:16px;color:#5a6167;margin-bottom:28px">ilustración dashboard</div>
+      <div style="font:800 20px sans-serif;color:#fff;margin-bottom:8px">Todo tu dinero, en un vistazo</div>
+      <div style="font:400 13px sans-serif;color:#a9a297;line-height:1.6">Aquí en Inicio ves tu capital vigente, cuánto vas a recibir este mes y el estado de cada uno de tus créditos.</div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:18px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#3ddbb8"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+    </div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Siguiente</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Tour · Dashboard</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="3c">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Tour 3/3 — completa tu perfil</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 24px 40px;box-sizing:border-box">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div class="stripe-ph" style="width:100%;height:170px;border-radius:16px;color:#5a6167;margin-bottom:28px">ilustración perfil</div>
+      <div style="font:800 20px sans-serif;color:#fff;margin-bottom:8px">Un último paso antes de invertir</div>
+      <div style="font:400 13px sans-serif;color:#a9a297;line-height:1.6">Completa tu Perfil — documentos y datos adicionales — para que puedas fondear en cuanto encuentres tu primera oportunidad.</div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:18px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#33383b"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#3ddbb8"></span>
+    </div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Empezar</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Tour · Perfil</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="3d">
+<div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>Inicio vacío — aún sin inversiones</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px">
+        <div><div style="font:400 12.5px sans-serif;color:#727b81">Hola,</div><div style="font:800 20px sans-serif;color:#fff">Hugo</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:60px">
+        <div class="stripe-ph" style="width:140px;height:110px;border-radius:14px;color:#5a6167;margin-bottom:22px">ilustración</div>
+        <div style="font:700 17px sans-serif;color:#fff;margin-bottom:8px">Aún no tienes inversiones</div>
+        <div style="font:400 12.5px sans-serif;color:#727b81;line-height:1.6;margin-bottom:22px;max-width:260px">Explora el Marketplace y elige el crédito con el que quieres empezar a generar rentabilidad.</div>
+        <div style="font:700 14px sans-serif;color:#0e1113;background:#3ddbb8;padding:14px 28px;border-radius:12px">Ver oportunidades</div>
+      </div>
+    </div>
+    <div class="mtabbar">
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;background:#3ddbb8"></span><span class="mtablabel" style="color:#3ddbb8">Inicio</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Marketplace</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inversiones</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Perfil</span></div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Inicio vacío</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="3e">
+<div class="dv-olabel"><a class="dv-oid" href="#3e">3e</a>Inicio con portafolio activo</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font:400 12.5px sans-serif;color:#727b81">Hola,</div>
+          <div style="font:800 20px sans-serif;color:#fff">Oscar</div>
+        </div>
+        <div style="position:relative;width:36px;height:36px;border-radius:50%;background:#15181b;border:1px solid #202427;display:flex;align-items:center;justify-content:center">
+          <span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #a9a297"></span>
+          <span style="position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:#c94f4f;border:1.5px solid #0e1113"></span>
+        </div>
+      </div>
+
+      <div style="background:#15181b;border:1px solid #202427;border-radius:16px;padding:20px;margin-bottom:14px">
+        <div style="font:600 10.5px sans-serif;color:#727b81;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Capital vigente</div>
+        <div style="font:800 28px sans-serif;color:#fff">$200.053.966</div>
+        <div style="font:600 13px sans-serif;color:#3ddbb8;margin-top:6px">27.89% E.A. neta</div>
+        <svg viewBox="0 0 360 60" style="width:100%;height:50px;margin-top:10px">
+          <defs><linearGradient id="m1a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3ddbb8" stop-opacity="0.3"/><stop offset="100%" stop-color="#3ddbb8" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,48 C70,44 120,30 180,22 C240,14 300,8 360,2 L360,60 L0,60 Z" fill="url(#m1a)"/>
+          <path d="M0,48 C70,44 120,30 180,22 C240,14 300,8 360,2" fill="none" stroke="#3ddbb8" stroke-width="2.5"/>
+        </svg>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;background:#1a120c;border:1px solid #4a2a1a;border-radius:13px;padding:13px 15px;margin-bottom:18px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#e0722f;flex:none"></span>
+        <div style="flex:1;font:600 12.5px sans-serif;color:#e0a578">2 créditos en mora requieren tu atención</div>
+        <div style="font:600 12px sans-serif;color:#e0722f">›</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+        <div style="font:700 15px sans-serif;color:#fff">Tus créditos</div>
+        <div style="font:500 12px sans-serif;color:#3ddbb8">Ver todos</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#e0722f;flex:none"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Hugo Sebastián Lozano</div>
+            <div style="font:400 11.5px sans-serif;color:#727b81">CR005 · En mora</div>
+          </div>
+          <div style="font:700 13.5px sans-serif;color:#fff;white-space:nowrap">$60.0M</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#3ddbb8;flex:none"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Benjamín Rodríguez</div>
+            <div style="font:400 11.5px sans-serif;color:#727b81">CR047 · Al día</div>
+          </div>
+          <div style="font:700 13.5px sans-serif;color:#fff;white-space:nowrap">$71.5M</div>
+        </div>
+      </div>
+    </div>
+    <div class="mtabbar">
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;background:#3ddbb8"></span><span class="mtablabel" style="color:#3ddbb8">Inicio</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Marketplace</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inversiones</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Perfil</span></div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Inicio con portafolio</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Marketplace — lista de oportunidades</span></div>
+<p class="dv-tnote">Hero con rentabilidad promedio de la plataforma, luego tarjetas verticales con barra de fondeo en vez de solo un badge de riesgo.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Marketplace</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px">
+      <div style="font:800 22px sans-serif;color:#fff;margin-bottom:2px">Marketplace</div>
+      <div style="font:400 12.5px sans-serif;color:#727b81;margin-bottom:16px">Elige el crédito en el que quieres invertir</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:18px">
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:13px 14px">
+          <div style="font:600 10px sans-serif;color:#727b81;text-transform:uppercase">Rentab. promedio</div>
+          <div style="font:700 17px sans-serif;color:#3ddbb8;margin-top:3px">27.89%</div>
+        </div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:13px 14px">
+          <div style="font:600 10px sans-serif;color:#727b81;text-transform:uppercase">Oportunidades</div>
+          <div style="font:700 17px sans-serif;color:#fff;margin-top:3px">6 activas</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:16px;overflow:hidden">
+          <div class="stripe-ph" style="height:130px;color:#5a6167;position:relative">
+            <span style="position:absolute;top:9px;left:9px;font:700 10px sans-serif;color:#e7eaec;background:rgba(10,12,13,.75);padding:3px 8px;border-radius:6px">Riesgo B1</span>
+            <span style="position:absolute;top:9px;right:9px;font:800 17px sans-serif;color:#3ddbb8;background:rgba(10,12,13,.75);padding:3px 9px;border-radius:6px">28.32%</span>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7">Casa · Bogotá</div>
+            <div style="height:6px;border-radius:3px;background:#202427;overflow:hidden;margin:10px 0 6px"><div style="width:32%;height:100%;background:#3ddbb8"></div></div>
+            <div style="display:flex;justify-content:space-between;font:400 11px sans-serif;color:#727b81"><span>32% fondeado</span><span>Plazo 48m</span></div>
+          </div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:16px;overflow:hidden">
+          <div class="stripe-ph" style="height:130px;color:#5a6167;position:relative">
+            <span style="position:absolute;top:9px;left:9px;font:700 10px sans-serif;color:#e7eaec;background:rgba(10,12,13,.75);padding:3px 8px;border-radius:6px">Riesgo B1</span>
+            <span style="position:absolute;top:9px;right:9px;font:800 17px sans-serif;color:#3ddbb8;background:rgba(10,12,13,.75);padding:3px 9px;border-radius:6px">29.08%</span>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7">Local comercial · Guadalajara de Buga</div>
+            <div style="height:6px;border-radius:3px;background:#202427;overflow:hidden;margin:10px 0 6px"><div style="width:41%;height:100%;background:#3ddbb8"></div></div>
+            <div style="display:flex;justify-content:space-between;font:400 11px sans-serif;color:#727b81"><span>41% fondeado</span><span>Plazo 46m</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mtabbar">
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inicio</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;background:#3ddbb8"></span><span class="mtablabel" style="color:#3ddbb8">Marketplace</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inversiones</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Perfil</span></div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Marketplace</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t5">
+<div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">Invertir — paso 1: monto</span></div>
+<p class="dv-tnote">Al tocar una tarjeta. Monto con chips rápidos y proyección en vivo (recibes al mes / ganancia total) — es lo que convence de invertir más.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="5a">
+<div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>Monto a invertir</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" keyboard="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 20px 30px;box-sizing:border-box">
+    <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:14px">‹ Marketplace</div>
+    <div style="font:700 19px sans-serif;color:#fff;margin-bottom:3px">Casa · Bogotá</div>
+    <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:20px">28.32% E.A. neta · 48 meses</div>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px">
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;background:#3ddbb8;color:#0e1113;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">1</div><span style="font:600 12px sans-serif;color:#fff">Monto</span></div>
+      <div style="width:24px;height:1px;background:#2a2f33"></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">2</div><span style="font:600 12px sans-serif;color:#727b81">Cuenta</span></div>
+      <div style="width:24px;height:1px;background:#2a2f33"></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">3</div><span style="font:600 12px sans-serif;color:#727b81">Confirmar</span></div>
+    </div>
+
+    <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:10px">¿Cuánto quieres invertir?</div>
+    <div style="display:flex;align-items:baseline;gap:6px;background:#15181b;border:1px solid #3ddbb8;border-radius:14px;padding:18px 18px;margin-bottom:12px">
+      <span style="font:700 22px sans-serif;color:#727b81">$</span>
+      <span style="font:700 28px sans-serif;color:#fff">10.000.000</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:7px 13px;border-radius:20px">$5.000.000</div>
+      <div style="font:600 12px sans-serif;color:#0e1113;background:#3ddbb8;padding:7px 13px;border-radius:20px">$10.000.000</div>
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:7px 13px;border-radius:20px">Máximo</div>
+    </div>
+
+    <div style="background:#182220;border:1px solid #23342f;border-radius:14px;padding:16px 18px;margin-bottom:24px">
+      <div style="font:600 10.5px sans-serif;color:#7fe8cf;text-transform:uppercase;margin-bottom:10px">Con $10M durante 48 meses</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font:400 12px sans-serif;color:#a9c9be">Recibes al mes</span><span style="font:700 14px sans-serif;color:#fff">≈ $210.000</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font:400 12px sans-serif;color:#a9c9be">Ganancia total</span><span style="font:700 14px sans-serif;color:#3ddbb8">$10.080.000</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font:400 12px sans-serif;color:#a9c9be">Al final recibes</span><span style="font:700 14px sans-serif;color:#fff">$20.080.000</span></div>
+    </div>
+
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Continuar</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Monto</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t6">
+<div class="dv-thd"><a class="dv-tid" href="#t6">6</a><span class="dv-tname">Invertir — paso 2: cuenta bancaria de desembolso</span></div>
+<p class="dv-tnote">Elige entre sus cuentas guardadas (llave Bre-B como canal principal) a dónde llegan sus pagos mensuales de este crédito.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="6a">
+<div class="dv-olabel"><a class="dv-oid" href="#6a">6a</a>Cuenta bancaria</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 20px 30px;box-sizing:border-box">
+    <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:14px">‹ Casa Bogotá</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px">
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;background:#182220;border:1px solid #3ddbb8;color:#3ddbb8;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">✓</div><span style="font:600 12px sans-serif;color:#727b81">Monto</span></div>
+      <div style="width:24px;height:1px;background:#2a2f33"></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;background:#3ddbb8;color:#0e1113;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">2</div><span style="font:600 12px sans-serif;color:#fff">Cuenta</span></div>
+      <div style="width:24px;height:1px;background:#2a2f33"></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">3</div><span style="font:600 12px sans-serif;color:#727b81">Confirmar</span></div>
+    </div>
+
+    <div style="font:600 13.5px sans-serif;color:#a9a297;margin-bottom:4px">¿A qué cuenta te desembolsamos?</div>
+    <div style="font:400 12px sans-serif;color:#525a5f;margin-bottom:16px">Aquí llegan tus intereses y, al final, tu capital.</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #3ddbb8;border-radius:13px;padding:14px 15px">
+        <div style="width:18px;height:18px;border-radius:50%;border:5px solid #3ddbb8;flex:none"></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:6px;align-items:center"><span style="font:600 13.5px sans-serif;color:#f5f6f7">Bancolombia · Ahorros</span><span style="font:600 9.5px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Tuya</span></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81">••••1234 · Llave Bre-B ✓</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 15px">
+        <div style="width:18px;height:18px;border-radius:50%;border:1px solid #33383b;flex:none"></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:6px;align-items:center"><span style="font:600 13.5px sans-serif;color:#f5f6f7">Davivienda · Corriente</span><span style="font:600 9.5px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Tuya</span></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81">••••8890</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed #2a2f33;border-radius:13px;padding:14px;color:#8a9297;font:600 13px sans-serif">+ Agregar nueva cuenta</div>
+    </div>
+
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Continuar</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Cuenta bancaria</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t7">
+<div class="dv-thd"><a class="dv-tid" href="#t7">7</a><span class="dv-tname">Invertir — paso 3: proceso hasta el desembolso</span></div>
+<p class="dv-tnote">Tracker de las 4 etapas reales (firmas → notaría → registro público → desembolso) con fecha estimada arriba, calculada del promedio de procesos similares.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="7a">
+<div class="dv-olabel"><a class="dv-oid" href="#7a">7a</a>Tracker de proceso</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:12px">‹ Marketplace</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <span style="font:600 10.5px sans-serif;color:#3ddbb8;background:#182220;padding:3px 9px;border-radius:6px">CR112</span>
+        <span style="font:600 10.5px sans-serif;color:#e0d078;background:#241f0c;padding:3px 9px;border-radius:6px">En proceso</span>
+      </div>
+      <div style="font:700 19px sans-serif;color:#fff;margin-bottom:16px">$10.000.000 en casa Bogotá</div>
+
+      <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:16px 18px;margin-bottom:22px">
+        <div style="font:600 10px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:6px">Fecha estimada de desembolso</div>
+        <div style="font:700 21px sans-serif;color:#3ddbb8">22 de septiembre, 2026</div>
+        <div style="font:400 11px sans-serif;color:#727b81;margin-top:4px">Promedio de procesos similares: 18 días hábiles.</div>
+      </div>
+
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:none">
+          <div style="width:24px;height:24px;border-radius:50%;background:#3ddbb8;color:#0e1113;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">1</div>
+          <div style="width:2px;flex:1;background:#2a2f33;margin:4px 0"></div>
+        </div>
+        <div style="flex:1;padding-bottom:18px">
+          <div style="display:flex;justify-content:space-between"><div style="font:700 13.5px sans-serif;color:#fff">Firmas</div><div style="font:400 11px sans-serif;color:#525a5f">28 ago–1 sept</div></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81;margin-top:2px">Contratos privados firmados. Falta programar la escritura pública.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:none">
+          <div style="width:24px;height:24px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">2</div>
+          <div style="width:2px;flex:1;background:#2a2f33;margin:4px 0"></div>
+        </div>
+        <div style="flex:1;padding-bottom:18px">
+          <div style="display:flex;justify-content:space-between"><div style="font:700 13.5px sans-serif;color:#a9a297">Notaría</div><div style="font:400 11px sans-serif;color:#525a5f">2–8 sept</div></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81;margin-top:2px">De la firma de comparecientes a la boleta de registro.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:none">
+          <div style="width:24px;height:24px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">3</div>
+          <div style="width:2px;flex:1;background:#2a2f33;margin:4px 0"></div>
+        </div>
+        <div style="flex:1;padding-bottom:18px">
+          <div style="display:flex;justify-content:space-between"><div style="font:700 13.5px sans-serif;color:#a9a297">Registro público</div><div style="font:400 11px sans-serif;color:#525a5f">9–19 sept</div></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81;margin-top:2px">De la boleta al certificado de libertad y tradición.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:none">
+          <div style="width:24px;height:24px;border-radius:50%;border:1px solid #33383b;color:#727b81;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif">4</div>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between"><div style="font:700 13.5px sans-serif;color:#a9a297">Desembolso</div><div style="font:400 11px sans-serif;color:#525a5f">22 sept</div></div>
+          <div style="font:400 11.5px sans-serif;color:#727b81;margin-top:2px">1 día hábil tras el certificado registrado.</div>
+        </div>
+      </div>
+
+      <div style="font:600 13.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:14px;border-radius:12px;text-align:center;margin-top:22px">Programar firma</div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Tracker</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t8">
+<div class="dv-thd"><a class="dv-tid" href="#t8">8</a><span class="dv-tname">Programar firma — bloqueada hasta 100% fondeo</span></div>
+<p class="dv-tnote">No se puede agendar mientras falte fondeo — evita agendar una firma que puede no pasar.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="8a">
+<div class="dv-olabel"><a class="dv-oid" href="#8a">8a</a>Bloqueada por fondeo</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 20px 30px;box-sizing:border-box">
+    <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:14px">‹ Tu proceso</div>
+    <div style="font:700 19px sans-serif;color:#fff;margin-bottom:4px">Firma de la escritura pública</div>
+    <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:22px">Casa Bogotá · CR112</div>
+
+    <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:18px 20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font:600 12px sans-serif;color:#a9a297">Fondeo</span><span style="font:600 10.5px sans-serif;color:#a9a297;background:#202427;padding:3px 8px;border-radius:5px">Bloqueado</span></div>
+      <div style="height:8px;border-radius:4px;background:#202427;overflow:hidden;margin-bottom:8px"><div style="width:68%;height:100%;background:#3ddbb8"></div></div>
+      <div style="font:400 12px sans-serif;color:#727b81">68% fondeado · faltan $9.600.000</div>
+    </div>
+    <div style="font:400 12px sans-serif;color:#525a5f;margin:14px 0 20px;line-height:1.6">Podrás elegir día, franja y modalidad de firma en cuanto llegue al 100%. Te avisamos apenas pase.</div>
+    <div style="font:600 13.5px sans-serif;color:#525a5f;background:#15181b;border:1px solid #202427;padding:15px;border-radius:12px;text-align:center">Programar firma</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Bloqueada</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t9">
+<div class="dv-thd"><a class="dv-tid" href="#t9">9</a><span class="dv-tname">Programar firma — presencial en notaría</span></div>
+<p class="dv-tnote">100% fondeada. Elige presencial o a domicilio; presencial muestra la notaría asignada o "por definir".</p>
+<div class="dv-opts">
+<div class="dv-opt" id="9a">
+<div class="dv-olabel"><a class="dv-oid" href="#9a">9a</a>Presencial · día y franja</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="min-height:100%;display:flex;flex-direction:column;background:#0e1113;padding:60px 20px 30px;box-sizing:border-box">
+    <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:14px">‹ Tu proceso</div>
+    <div style="font:700 19px sans-serif;color:#fff;margin-bottom:4px">Firma de la escritura pública</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px"><span style="width:6px;height:6px;border-radius:50%;background:#3ddbb8"></span><span style="font:500 12px sans-serif;color:#7fe8cf">100% fondeada — ya puedes programar</span></div>
+
+    <div style="display:flex;gap:8px;margin-bottom:18px">
+      <div style="font:600 12.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:10px 16px;border-radius:9px">Presencial</div>
+      <div style="font:600 12.5px sans-serif;color:#a9a297;border:1px solid #2a2f33;padding:10px 16px;border-radius:9px">A domicilio</div>
+    </div>
+
+    <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 17px;margin-bottom:18px">
+      <div style="font:600 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px">Notaría asignada</div>
+      <div style="font:600 14px sans-serif;color:#a9a297">Por definir</div>
+      <div style="font:400 11.5px sans-serif;color:#525a5f;margin-top:4px">Te confirmamos la dirección antes de tu cita.</div>
+    </div>
+
+    <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:8px">Elige día</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:8px 13px;border-radius:8px">Mar 2</div>
+      <div style="font:600 12px sans-serif;color:#0e1113;background:#3ddbb8;padding:8px 13px;border-radius:8px">Mié 3</div>
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:8px 13px;border-radius:8px">Jue 4</div>
+    </div>
+    <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:8px">Franja horaria</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:8px 13px;border-radius:8px">8–10am</div>
+      <div style="font:600 12px sans-serif;color:#0e1113;background:#3ddbb8;padding:8px 13px;border-radius:8px">10am–12pm</div>
+      <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:8px 13px;border-radius:8px">2–4pm</div>
+    </div>
+    <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Confirmar cita</div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Presencial</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t10">
+<div class="dv-thd"><a class="dv-tid" href="#t10">10</a><span class="dv-tname">Programar firma — a domicilio</span></div>
+<p class="dv-tnote">AM/PM → bloque de 2h (sin 12–2pm) → dirección + indicaciones para que el notario no se pierda.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="10a">
+<div class="dv-olabel"><a class="dv-oid" href="#10a">10a</a>A domicilio</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" keyboard="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:14px">‹ Tu proceso</div>
+      <div style="font:700 19px sans-serif;color:#fff;margin-bottom:16px">Firma a domicilio</div>
+
+      <div style="display:flex;gap:8px;margin-bottom:18px">
+        <div style="font:600 12.5px sans-serif;color:#a9a297;border:1px solid #2a2f33;padding:10px 16px;border-radius:9px">Presencial</div>
+        <div style="font:600 12.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:10px 16px;border-radius:9px">A domicilio</div>
+      </div>
+
+      <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:8px">¿Mañana o tarde?</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <div style="font:600 12.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:9px 18px;border-radius:9px">Mañana (AM)</div>
+        <div style="font:600 12.5px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:9px 18px;border-radius:9px">Tarde (PM)</div>
+      </div>
+      <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:8px">Bloque de 2 horas</div>
+      <div style="display:flex;gap:8px;margin-bottom:4px">
+        <div style="font:600 12px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:8px 13px;border-radius:8px">8–10am</div>
+        <div style="font:600 12px sans-serif;color:#0e1113;background:#3ddbb8;padding:8px 13px;border-radius:8px">10am–12pm</div>
+      </div>
+      <div style="font:400 10.5px sans-serif;color:#525a5f;margin-bottom:20px">No agendamos entre 12m y 2pm (almuerzo del equipo notarial).</div>
+
+      <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:7px">Dirección de la firma</div>
+      <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:13px 15px;font:400 13px sans-serif;color:#e7eaec;margin-bottom:16px">Calle 93 #14-20, Bogotá</div>
+
+      <div style="font:600 12.5px sans-serif;color:#a9a297;margin-bottom:7px">Indicaciones para llegar</div>
+      <div style="background:#15181b;border:1px solid #202427;border-radius:11px;padding:13px 15px;min-height:60px;font:400 12px sans-serif;color:#727b81;margin-bottom:6px">Ej: Torre B, piso 4, of. 402. Anunciarse en recepción.</div>
+      <div style="font:400 11px sans-serif;color:#525a5f;margin-bottom:22px;line-height:1.5">Si es oficina o edificio, indica piso, empresa o si debe esperar en recepción — para que el notario no llegue y no sepa a dónde ir.</div>
+
+      <div style="font:700 15px sans-serif;color:#0e1113;background:#3ddbb8;padding:16px;border-radius:13px;text-align:center">Confirmar dirección y horario</div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">A domicilio</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t11">
+<div class="dv-thd"><a class="dv-tid" href="#t11">11</a><span class="dv-tname">Desembolso — pantalla de celebración</span></div>
+<p class="dv-tnote">Rompe la grilla del resto de la app a propósito: foto + resplandor + sello dorado, único acento cálido reservado para este momento.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="11a">
+<div class="dv-olabel"><a class="dv-oid" href="#11a">11a</a>Desembolsado</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:14px 14px">
+    <div class="mscroll" style="padding-top:44px">
+      <div style="position:relative;height:200px;overflow:hidden">
+        <div class="stripe-ph" style="position:absolute;inset:0;color:#5a6167;align-items:flex-start;padding-top:14px">foto inmueble</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,17,19,0) 30%,rgba(14,17,19,.94) 92%)"></div>
+        <div style="position:absolute;left:20px;bottom:16px;right:20px">
+          <span style="font:600 10px sans-serif;color:#0e1113;background:#3ddbb8;padding:3px 9px;border-radius:6px">Desembolsado hoy</span>
+          <div style="font:800 21px sans-serif;color:#fff;margin-top:8px">Ya eres inversionista en casa Bogotá</div>
+        </div>
+      </div>
+
+      <div style="padding:0 20px;margin-top:-30px">
+        <div style="position:relative;background:#161a1c;border:1px solid #23282c;border-radius:16px;padding:22px 20px;overflow:hidden;margin-bottom:14px">
+          <div style="position:absolute;top:-70px;left:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(61,219,184,.28),transparent 70%)"></div>
+          <div style="position:relative">
+            <div style="font:600 10px sans-serif;color:#7fe8cf;text-transform:uppercase;margin-bottom:8px">Desembolsado a tu cuenta</div>
+            <div style="font:800 32px sans-serif;color:#fff">$10.000.000</div>
+            <div style="font:400 12px sans-serif;color:#8a9297;margin-top:5px">Bancolombia · Ahorros ••1234</div>
+            <div style="display:flex;gap:20px;margin-top:16px;padding-top:14px;border-top:1px solid #23282c">
+              <div><div style="font:500 9.5px sans-serif;color:#727b81;text-transform:uppercase">1er pago</div><div style="font:700 13px sans-serif;color:#fff;margin-top:2px">23 oct</div></div>
+              <div><div style="font:500 9.5px sans-serif;color:#727b81;text-transform:uppercase">Al mes</div><div style="font:700 13px sans-serif;color:#3ddbb8;margin-top:2px">$210K</div></div>
+              <div><div style="font:500 9.5px sans-serif;color:#727b81;text-transform:uppercase">Al final</div><div style="font:700 13px sans-serif;color:#fff;margin-top:2px">$20.08M</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#161a1c;border:1px solid #23282c;border-radius:16px;padding:20px;display:flex;align-items:center;gap:14px;margin-bottom:20px">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(160deg,#e9c66b,#b8862f);display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 4px 14px rgba(184,134,47,.4)">
+            <div style="width:34px;height:34px;border-radius:50%;border:2px solid #f3dfa3;display:flex;align-items:center;justify-content:center;font:800 7px sans-serif;color:#3a2a08">REG.</div>
+          </div>
+          <div>
+            <div style="font:700 13.5px sans-serif;color:#f3dfa3">Escritura registrada</div>
+            <div style="font:400 11px sans-serif;color:#727b81;margin-top:2px">Tu garantía quedó formalizada.</div>
+          </div>
+        </div>
+
+        <div style="font:600 13.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:15px;border-radius:12px;text-align:center">Ver mi inversión</div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Desembolso</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t12">
+<div class="dv-thd"><a class="dv-tid" href="#t12">12</a><span class="dv-tname">Mis Inversiones — panel de portafolio</span></div>
+<p class="dv-tnote">Valor proyectado con gráfica, "recibes este mes", conteo por estado y lista de créditos con el deudor primero.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="12a">
+<div class="dv-olabel"><a class="dv-oid" href="#12a">12a</a>Mis Inversiones</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:60px 20px 24px">
+      <div style="font:800 22px sans-serif;color:#fff;margin-bottom:2px">Mis Inversiones</div>
+      <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:16px">5 inversiones · 4 activas</div>
+
+      <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:18px;margin-bottom:12px">
+        <div style="font:600 10px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:6px">Capital invertido</div>
+        <div style="font:800 25px sans-serif;color:#fff">$312.500.000</div>
+        <svg viewBox="0 0 360 60" style="width:100%;height:50px;margin-top:8px">
+          <defs><linearGradient id="m12" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3ddbb8" stop-opacity="0.3"/><stop offset="100%" stop-color="#3ddbb8" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,52 C90,46 160,30 230,16 C280,8 320,3 360,1 L360,60 L0,60 Z" fill="url(#m12)"/>
+          <path d="M0,52 C90,46 160,30 230,16 C280,8 320,3 360,1" fill="none" stroke="#3ddbb8" stroke-width="2.5"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font:400 11px sans-serif;color:#727b81">hoy</span><span style="font:700 12.5px sans-serif;color:#3ddbb8">$801M proyectado · jun 2030</span></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;background:#182220;border:1px solid #23342f;border-radius:12px;padding:12px 13px">
+          <div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Recibes este mes</div>
+          <div style="font:700 16px sans-serif;color:#3ddbb8;margin-top:3px">$2.18M</div>
+        </div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px">
+          <div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Ganancias</div>
+          <div style="font:700 16px sans-serif;color:#fff;margin-top:3px">$52.1M</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:18px">
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px;text-align:center"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Al día</div><div style="font:700 16px sans-serif;color:#fff;margin-top:3px">2</div></div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px;text-align:center"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">En mora</div><div style="font:700 16px sans-serif;color:#fff;margin-top:3px">2</div></div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px;text-align:center"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Fondeo</div><div style="font:700 16px sans-serif;color:#fff;margin-top:3px">1</div></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+        <div style="font:700 14.5px sans-serif;color:#fff">Tus créditos</div>
+        <div style="font:500 12px sans-serif;color:#3ddbb8">Ver todos</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <div style="flex:1;min-width:0">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Hugo Sebastián Lozano</div>
+            <div style="font:400 11px sans-serif;color:#727b81">CR005 · 34.5% E.A.</div>
+          </div>
+          <span style="font:600 10.5px sans-serif;color:#a9a297;background:#241f0c;padding:3px 8px;border-radius:5px">En mora</span>
+          <div style="font:700 13.5px sans-serif;color:#fff;white-space:nowrap">$60.0M</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <div style="flex:1;min-width:0">
+            <div style="font:600 13.5px sans-serif;color:#f5f6f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Benjamín Rodríguez</div>
+            <div style="font:400 11px sans-serif;color:#727b81">CR047 · 25.3% E.A.</div>
+          </div>
+          <span style="font:600 10.5px sans-serif;color:#7fe8cf;background:#182220;padding:3px 8px;border-radius:5px">Al día</span>
+          <div style="font:700 13.5px sans-serif;color:#fff;white-space:nowrap">$71.5M</div>
+        </div>
+      </div>
+    </div>
+    <div class="mtabbar">
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inicio</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Marketplace</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;background:#3ddbb8"></span><span class="mtablabel" style="color:#3ddbb8">Inversiones</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Perfil</span></div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Mis Inversiones</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t13">
+<div class="dv-thd"><a class="dv-tid" href="#t13">13</a><span class="dv-tname">Detalle de crédito</span></div>
+<p class="dv-tnote">Foto + Mi Inversión arriba; toda la info secundaria (ubicación, avalúo, fechas) fusionada en una franja compacta abajo, sin espacios muertos.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="13a">
+<div class="dv-olabel"><a class="dv-oid" href="#13a">13a</a>Detalle</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding-top:44px">
+      <div class="stripe-ph" style="height:180px;color:#5a6167">foto inmueble</div>
+      <div style="padding:18px 20px">
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <span style="font:600 10.5px sans-serif;color:#3ddbb8;background:#182220;padding:3px 9px;border-radius:6px">CR005</span>
+          <span style="font:600 10.5px sans-serif;color:#7fe8cf;background:#182220;padding:3px 9px;border-radius:6px">Activo</span>
+        </div>
+        <div style="font:700 20px sans-serif;color:#fff;margin-bottom:3px">Hugo Sebastián Lozano</div>
+        <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:16px">Casa · Chía, Cundinamarca</div>
+
+        <div style="display:flex;gap:16px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px">
+          <div style="font:600 13px sans-serif;color:#3ddbb8;padding-bottom:8px;border-bottom:2px solid #3ddbb8;white-space:nowrap">Detalles</div>
+          <div style="font:600 13px sans-serif;color:#727b81;padding-bottom:8px;white-space:nowrap">Abonos</div>
+          <div style="font:600 13px sans-serif;color:#727b81;padding-bottom:8px;white-space:nowrap">Documentos</div>
+          <div style="font:600 13px sans-serif;color:#727b81;padding-bottom:8px;white-space:nowrap">Cobranza</div>
+        </div>
+
+        <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:16px 18px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div><div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Mi inversión</div><div style="font:700 19px sans-serif;color:#fff;margin-top:2px">$60.0M</div></div>
+            <div><div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Rentabilidad</div><div style="font:700 19px sans-serif;color:#3ddbb8;margin-top:2px">34.5%</div></div>
+            <div><div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Plazo</div><div style="font:700 19px sans-serif;color:#fff;margin-top:2px">24m</div></div>
+            <div><div style="font:600 9.5px sans-serif;color:#727b81;text-transform:uppercase">Cuota mes</div><div style="font:700 19px sans-serif;color:#fff;margin-top:2px">$1.49M</div></div>
+          </div>
+          <div style="height:1px;background:#202427;margin:12px 0"></div>
+          <div style="display:flex;justify-content:space-between;font:600 10.5px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:5px"><span>Capital recuperado</span><span style="color:#e7eaec">0%</span></div>
+          <div style="height:6px;border-radius:3px;background:#202427;overflow:hidden"><div style="width:0%;height:100%;background:#3ddbb8"></div></div>
+        </div>
+
+        <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:16px 18px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 18px">
+            <div><div style="font:500 9.5px sans-serif;color:#525a5f;text-transform:uppercase">Ubicación</div><div style="font:600 12px sans-serif;color:#e7eaec;margin-top:2px">Chía</div></div>
+            <div><div style="font:500 9.5px sans-serif;color:#525a5f;text-transform:uppercase">Avalúo</div><div style="font:600 12px sans-serif;color:#e7eaec;margin-top:2px">$350M</div></div>
+            <div><div style="font:500 9.5px sans-serif;color:#525a5f;text-transform:uppercase">Firma</div><div style="font:600 12px sans-serif;color:#e7eaec;margin-top:2px">20 jul 25</div></div>
+            <div><div style="font:500 9.5px sans-serif;color:#525a5f;text-transform:uppercase">Siguiente pago</div><div style="font:600 12px sans-serif;color:#e7eaec;margin-top:2px">22 ago</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <div style="flex:1;font:600 12.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:13px;border-radius:11px;text-align:center">Contactar a aluri</div>
+          <div style="flex:1;font:600 12.5px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:13px;border-radius:11px;text-align:center">Extracto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Detalle</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t14">
+<div class="dv-thd"><a class="dv-tid" href="#t14">14</a><span class="dv-tname">Abonos — pagos recibidos con desglose</span></div>
+<p class="dv-tnote">Lista de 4 columnas; el desglose completo (interés corriente, mora, dispersión, comisión aluri, neto) solo al expandir una cuota, con comprobante.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="14a">
+<div class="dv-olabel"><a class="dv-oid" href="#14a">14a</a>Abonos</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Hugo Sebastián Lozano</div>
+      <div style="font:700 18px sans-serif;color:#fff;margin-bottom:14px">Abonos · CR005</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Recibido</div><div style="font:700 15px sans-serif;color:#3ddbb8;margin-top:3px">$19.4M</div></div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Próxima</div><div style="font:700 15px sans-serif;color:#fff;margin-top:3px">$1.49M</div></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 15px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font:600 13px sans-serif;color:#e7eaec">23 jul 2025</div><div style="font:400 11px sans-serif;color:#7fe8cf">Pagada</div></div>
+            <div style="font:700 14px sans-serif;color:#fff">$1.452.000</div>
+          </div>
+        </div>
+
+        <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:12px;padding:12px 15px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div><div style="font:600 13px sans-serif;color:#e7eaec">23 ago 2025</div><div style="font:400 11px sans-serif;color:#7fe8cf">Pagada</div></div>
+            <div style="font:700 14px sans-serif;color:#fff">$1.452.000</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding-top:8px;border-top:1px solid #202427">
+            <div style="display:flex;justify-content:space-between"><span style="font:400 11.5px sans-serif;color:#a9a297">Interés corriente</span><span style="font:600 11.5px sans-serif;color:#c8ccce">$1.500.000</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font:400 11.5px sans-serif;color:#a9a297">Interés de mora</span><span style="font:600 11.5px sans-serif;color:#c8ccce">$0</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font:400 11.5px sans-serif;color:#a9a297">Dispersión</span><span style="font:600 11.5px sans-serif;color:#c8ccce">–$8.000</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font:400 11.5px sans-serif;color:#a9a297">Comisión tecnológica aluri</span><span style="font:600 11.5px sans-serif;color:#c8ccce">–$40.000</span></div>
+            <div style="height:1px;background:#202427;margin:2px 0"></div>
+            <div style="display:flex;justify-content:space-between"><span style="font:600 12.5px sans-serif;color:#7fe8cf">Recibiste</span><span style="font:700 13px sans-serif;color:#3ddbb8">$1.452.000</span></div>
+            <div style="font:600 11.5px sans-serif;color:#3ddbb8;text-align:center;margin-top:4px">Ver comprobante</div>
+          </div>
+        </div>
+
+        <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 15px;opacity:.55">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font:600 13px sans-serif;color:#e7eaec">23 ago 2026</div><div style="font:400 11px sans-serif;color:#a9a297">Pendiente</div></div>
+            <div style="font:700 14px sans-serif;color:#fff">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Abonos</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t15">
+<div class="dv-thd"><a class="dv-tid" href="#t15">15</a><span class="dv-tname">Cobranza</span></div>
+<p class="dv-tnote">Solo tiene contenido cuando el crédito está en mora — timeline de gestión, humana o de IA, para tranquilizar en vez de alarmar.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="15a">
+<div class="dv-olabel"><a class="dv-oid" href="#15a">15a</a>Cobranza</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Andrea Patricia Gómez</div>
+      <div style="font:700 18px sans-serif;color:#fff;margin-bottom:14px">Cobranza · CR006</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px;text-align:center"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Días mora</div><div style="font:700 17px sans-serif;color:#e0a578;margin-top:3px">12</div></div>
+        <div style="flex:1;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 13px;text-align:center"><div style="font:600 9px sans-serif;color:#727b81;text-transform:uppercase">Monto</div><div style="font:700 17px sans-serif;color:#fff;margin-top:3px">$1.83M</div></div>
+      </div>
+
+      <div style="background:#182220;border:1px solid #23342f;border-radius:11px;padding:12px 14px;font:500 12px sans-serif;color:#a9c9be;margin-bottom:20px">Nuestro equipo está gestionando este crédito activamente.</div>
+
+      <div style="font:600 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:10px">Historial de gestión</div>
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;gap:12px;padding-bottom:16px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#3ddbb8;flex:none;margin-top:3px"></span>
+          <div style="flex:1">
+            <div style="font:600 12.5px sans-serif;color:#e7eaec">Llamada · Agente humano</div>
+            <div style="font:400 11.5px sans-serif;color:#a9a297;margin-top:2px">Se comprometió a pagar antes del 30 de agosto.</div>
+            <span style="display:inline-block;margin-top:5px;font:600 10px sans-serif;color:#7fe8cf;background:#182220;padding:2px 7px;border-radius:5px">Acuerdo alcanzado</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding-bottom:16px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#525a5f;flex:none;margin-top:3px"></span>
+          <div style="flex:1">
+            <div style="font:600 12.5px sans-serif;color:#e7eaec">Recordatorio · Asistente aluri (IA)</div>
+            <div style="font:400 11.5px sans-serif;color:#a9a297;margin-top:2px">WhatsApp y correo sobre la cuota vencida.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#525a5f;flex:none;margin-top:3px"></span>
+          <div style="flex:1">
+            <div style="font:600 12.5px sans-serif;color:#e7eaec">Cuota #14 venció sin pago</div>
+            <div style="font:400 11.5px sans-serif;color:#a9a297;margin-top:2px">Se inicia la gestión de cobranza.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Cobranza</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t16">
+<div class="dv-thd"><a class="dv-tid" href="#t16">16</a><span class="dv-tname">Documentos del crédito</span></div>
+<p class="dv-tnote">Los 3 contratos + certificado, cada uno con su contraparte — distinto de "Documentos" del perfil de cuenta.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="16a">
+<div class="dv-olabel"><a class="dv-oid" href="#16a">16a</a>Documentos</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Hugo Sebastián Lozano</div>
+      <div style="font:700 18px sans-serif;color:#fff;margin-bottom:4px">Documentos · CR005</div>
+      <div style="font:400 11.5px sans-serif;color:#525a5f;margin-bottom:16px">4 de 4 firmados — crédito formalizado.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="font:600 13px sans-serif;color:#f5f6f7">Contrato de mutuo con garantía</div>
+          <div style="font:400 11px sans-serif;color:#727b81;margin-top:2px">Con Hugo Sebastián Lozano (deudor)</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font:500 11px sans-serif;color:#7fe8cf">Firmado 20 jul 2025</span><span style="font:600 11.5px sans-serif;color:#3ddbb8">Ver</span></div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="font:600 13px sans-serif;color:#f5f6f7">Escritura pública de hipoteca</div>
+          <div style="font:400 11px sans-serif;color:#727b81;margin-top:2px">Notaría 5 de Bogotá</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font:500 11px sans-serif;color:#7fe8cf">Firmada 22 jul 2025</span><span style="font:600 11.5px sans-serif;color:#3ddbb8">Ver</span></div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="font:600 13px sans-serif;color:#f5f6f7">Certificado de libertad y tradición</div>
+          <div style="font:400 11px sans-serif;color:#727b81;margin-top:2px">Oficina de Registro</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font:500 11px sans-serif;color:#7fe8cf">Registrado 5 ago 2025</span><span style="font:600 11.5px sans-serif;color:#3ddbb8">Ver</span></div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="font:600 13px sans-serif;color:#f5f6f7">Contrato de administración aluri</div>
+          <div style="font:400 11px sans-serif;color:#727b81;margin-top:2px">Con aluri — cobranza y comisión tecnológica</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font:500 11px sans-serif;color:#7fe8cf">Firmado 15 jul 2025</span><span style="font:600 11.5px sans-serif;color:#3ddbb8">Ver</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Documentos</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t17">
+<div class="dv-thd"><a class="dv-tid" href="#t17">17</a><span class="dv-tname">Contactar a aluri — bottom sheet</span></div>
+<p class="dv-tnote">3 caminos: asistente IA, correo, o llamar a un humano — nunca escondido.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="17a">
+<div class="dv-olabel"><a class="dv-oid" href="#17a">17a</a>Modal de contacto</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;justify-content:flex-end;background:#0e1113">
+    <div style="position:relative;flex:1;background:#161a1c;opacity:.4"></div>
+    <div style="background:#15181b;border-top:1px solid #23282c;border-radius:20px 20px 0 0;padding:20px 20px 34px">
+      <div style="width:36px;height:4px;border-radius:2px;background:#33383b;margin:0 auto 16px"></div>
+      <div style="font:700 17px sans-serif;color:#fff;margin-bottom:2px">Contactar a aluri</div>
+      <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:18px">Sobre tu inversión CR005</div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;background:#0e1113;border:1px solid #202427;border-radius:12px;padding:13px 14px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#182220;display:flex;align-items:center;justify-content:center;font:700 11px sans-serif;color:#3ddbb8;flex:none">IA</div>
+          <div style="flex:1"><div style="font:600 13px sans-serif;color:#f5f6f7">Hablar con el asistente</div><div style="font:400 11px sans-serif;color:#727b81">Respuesta inmediata, 24/7</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#0e1113;border:1px solid #202427;border-radius:12px;padding:13px 14px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#182220;display:flex;align-items:center;justify-content:center;font:700 13px sans-serif;color:#3ddbb8;flex:none">@</div>
+          <div style="flex:1"><div style="font:600 13px sans-serif;color:#f5f6f7">Escribir un correo</div><div style="font:400 11px sans-serif;color:#727b81">Respuesta en menos de 24h</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#0e1113;border:1px solid #202427;border-radius:12px;padding:13px 14px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#182220;display:flex;align-items:center;justify-content:center;font:700 9px sans-serif;color:#3ddbb8;flex:none">TEL</div>
+          <div style="flex:1"><div style="font:600 13px sans-serif;color:#f5f6f7">Llamar a un asesor</div><div style="font:400 11px sans-serif;color:#727b81">L-V 8am–6pm</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Contactar</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t18">
+<div class="dv-thd"><a class="dv-tid" href="#t18">18</a><span class="dv-tname">Notificaciones</span></div>
+<p class="dv-tnote">Agrupadas Hoy / Esta semana / Antes; el monto reemplaza la hora cuando la notificación es sobre dinero.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="18a">
+<div class="dv-olabel"><a class="dv-oid" href="#18a">18a</a>Notificaciones</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:800 22px sans-serif;color:#fff;margin-bottom:2px">Notificaciones</div>
+      <div style="font:400 12px sans-serif;color:#727b81;margin-bottom:16px">3 sin leer</div>
+
+      <div style="font:600 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:8px">Hoy</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;gap:10px;background:#15181b;border:1px solid #3ddbb8;border-radius:12px;padding:12px 14px">
+          <div style="flex:1;min-width:0">
+            <span style="font:600 9px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Desembolso</span>
+            <div style="font:600 12.5px sans-serif;color:#f5f6f7;margin-top:4px">Inversión en casa Bogotá desembolsada</div>
+          </div>
+          <div style="font:700 14px sans-serif;color:#3ddbb8;white-space:nowrap">$10.0M</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#15181b;border:1px solid #3ddbb8;border-radius:12px;padding:12px 14px">
+          <div style="flex:1;min-width:0">
+            <span style="font:600 9px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Pago recibido</span>
+            <div style="font:600 12.5px sans-serif;color:#f5f6f7;margin-top:4px">Nuevo abono · CR047</div>
+          </div>
+          <div style="font:700 14px sans-serif;color:#3ddbb8;white-space:nowrap">$1.45M</div>
+        </div>
+      </div>
+
+      <div style="font:600 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:8px">Esta semana</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+        <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 14px">
+          <span style="font:600 9px sans-serif;color:#a9a297;background:#202427;padding:2px 6px;border-radius:5px">Cobranza</span>
+          <div style="font:600 12.5px sans-serif;color:#e7eaec;margin-top:4px">Acuerdo alcanzado · CR006</div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 14px">
+          <span style="font:600 9px sans-serif;color:#a9a297;background:#202427;padding:2px 6px;border-radius:5px">Mora</span>
+          <div style="font:600 12.5px sans-serif;color:#e7eaec;margin-top:4px">CR005 entró en mora</div>
+        </div>
+      </div>
+
+      <div style="font:600 11px sans-serif;color:#727b81;text-transform:uppercase;margin-bottom:8px">Antes</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 14px;opacity:.7">
+          <span style="font:600 9px sans-serif;color:#a9a297;background:#202427;padding:2px 6px;border-radius:5px">Documento</span>
+          <div style="font:600 12.5px sans-serif;color:#e7eaec;margin-top:4px">Extracto de agosto listo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Notificaciones</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t19">
+<div class="dv-thd"><a class="dv-tid" href="#t19">19</a><span class="dv-tname">Perfil — resumen y acceso a pestañas</span></div>
+<p class="dv-tnote">Pantalla índice: datos personales, adicionales, documentos, cuentas bancarias y seguridad — un solo "Perfil", no 3 secciones sueltas.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="19a">
+<div class="dv-olabel"><a class="dv-oid" href="#19a">19a</a>Perfil</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#182220;color:#3ddbb8;display:flex;align-items:center;justify-content:center;font:700 16px sans-serif;flex:none">OM</div>
+        <div>
+          <div style="font:700 17px sans-serif;color:#fff">Oscar Zapata</div>
+          <div style="font:400 11.5px sans-serif;color:#7fe8cf">Perfil 44% completo</div>
+        </div>
+      </div>
+      <div style="height:6px;border-radius:3px;background:#202427;overflow:hidden;margin-bottom:22px"><div style="width:44%;height:100%;background:#3ddbb8"></div></div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 16px">
+          <div style="flex:1;font:600 13.5px sans-serif;color:#f5f6f7">Datos personales</div><div style="color:#525a5f">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 16px">
+          <div style="flex:1;font:600 13.5px sans-serif;color:#f5f6f7">Datos adicionales <span style="font:500 11px sans-serif;color:#727b81">4/9</span></div><div style="color:#525a5f">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 16px">
+          <div style="flex:1;font:600 13.5px sans-serif;color:#f5f6f7">Documentos <span style="font:500 11px sans-serif;color:#c98b4a">1 pendiente</span></div><div style="color:#525a5f">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 16px">
+          <div style="flex:1;font:600 13.5px sans-serif;color:#f5f6f7">Cuentas bancarias <span style="font:500 11px sans-serif;color:#727b81">3</span></div><div style="color:#525a5f">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:15px 16px">
+          <div style="flex:1;font:600 13.5px sans-serif;color:#f5f6f7">Seguridad</div><div style="color:#525a5f">›</div>
+        </div>
+      </div>
+      <div style="font:600 13px sans-serif;color:#c94f4f;text-align:center;margin-top:24px">Cerrar sesión</div>
+    </div>
+    <div class="mtabbar">
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inicio</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Marketplace</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid #6a7278"></span><span class="mtablabel" style="color:#727b81">Inversiones</span></div>
+      <div class="mtab"><span style="width:16px;height:16px;border-radius:50%;background:#3ddbb8"></span><span class="mtablabel" style="color:#3ddbb8">Perfil</span></div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Perfil</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t20">
+<div class="dv-thd"><a class="dv-tid" href="#t20">20</a><span class="dv-tname">Perfil — documentos de la cuenta</span></div>
+<p class="dv-tnote">Identidad y certificado de ingresos se suben; la declaración de origen de fondos se firma con un clic, sin imprimir ni escanear.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="20a">
+<div class="dv-olabel"><a class="dv-oid" href="#20a">20a</a>Documentos de cuenta</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Perfil</div>
+      <div style="font:700 18px sans-serif;color:#fff;margin-bottom:4px">Documentos</div>
+      <div style="font:400 11.5px sans-serif;color:#727b81;margin-bottom:16px">Distinto a los de cada crédito — estos son tuyos, una sola vez.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <div style="flex:1"><div style="font:600 13px sans-serif;color:#f5f6f7">Documento de identidad</div><div style="font:400 11px sans-serif;color:#7fe8cf;margin-top:2px">Cargado 12 jul 2025</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#15181b;border:1px solid #202427;border-radius:13px;padding:13px 15px">
+          <div style="flex:1"><div style="font:600 13px sans-serif;color:#f5f6f7">Certificado de ingresos</div><div style="font:400 11px sans-serif;color:#a9a297;margin-top:2px">Falta</div></div>
+          <div style="font:600 11.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:6px 13px;border-radius:7px">Subir</div>
+        </div>
+
+        <div style="background:#15181b;border:1px solid #202427;border-radius:14px;padding:16px 17px">
+          <div style="font:600 13px sans-serif;color:#f5f6f7;margin-bottom:2px">Declaración de origen de fondos</div>
+          <div style="font:400 11px sans-serif;color:#a9a297;margin-bottom:12px">Pendiente de firma</div>
+          <div style="background:#0e1113;border:1px solid #202427;border-radius:9px;padding:12px 13px;font:400 11.5px sans-serif;color:#727b81;line-height:1.5;margin-bottom:11px">"Declaro que los fondos... " <span style="color:#3ddbb8">Ver completo</span></div>
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
+            <div style="width:15px;height:15px;border:1px solid #33383b;border-radius:4px;flex:none"></div>
+            <div style="font:400 12px sans-serif;color:#a9a297">He leído y acepto</div>
+          </div>
+          <div style="font:600 12.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:12px;border-radius:10px;text-align:center">Firmar digitalmente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Documentos</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t21">
+<div class="dv-thd"><a class="dv-tid" href="#t21">21</a><span class="dv-tname">Perfil — cuentas bancarias</span></div>
+<p class="dv-tnote">Propias y de terceros, llave Bre-B como canal principal obligatorio.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="21a">
+<div class="dv-olabel"><a class="dv-oid" href="#21a">21a</a>Cuentas bancarias</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Perfil</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font:700 18px sans-serif;color:#fff">Cuentas bancarias</div>
+        <div style="font:600 11.5px sans-serif;color:#0e1113;background:#3ddbb8;padding:7px 12px;border-radius:8px">+ Agregar</div>
+      </div>
+      <div style="font:400 11.5px sans-serif;color:#727b81;margin-bottom:16px">Elige entre ellas cada vez que fondees.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#15181b;border:1px solid #3ddbb8;border-radius:13px;padding:14px 16px">
+          <div style="display:flex;gap:6px;margin-bottom:4px"><span style="font:600 13.5px sans-serif;color:#f5f6f7">Bancolombia · Ahorros</span><span style="font:600 9px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Tuya</span></div>
+          <div style="font:400 11px sans-serif;color:#727b81">••••1234 · Llave Bre-B ✓</div>
+          <span style="display:inline-block;margin-top:6px;font:600 9.5px sans-serif;color:#7fe8cf;background:#182220;padding:2px 8px;border-radius:5px">Predeterminada</span>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="display:flex;gap:6px;margin-bottom:4px"><span style="font:600 13.5px sans-serif;color:#f5f6f7">Davivienda · Corriente</span><span style="font:600 9px sans-serif;color:#7fe8cf;background:#182220;padding:2px 6px;border-radius:5px">Tuya</span></div>
+          <div style="font:400 11px sans-serif;color:#c98b4a">Falta la llave Bre-B</div>
+        </div>
+        <div style="background:#15181b;border:1px solid #202427;border-radius:13px;padding:14px 16px">
+          <div style="display:flex;gap:6px;margin-bottom:4px"><span style="font:600 13.5px sans-serif;color:#f5f6f7">Nequi · Ahorros</span><span style="font:600 9px sans-serif;color:#a9a297;background:#202427;padding:2px 6px;border-radius:5px">De un tercero</span></div>
+          <div style="font:400 11px sans-serif;color:#727b81">María Fernanda Zapata · ••••4471</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Cuentas</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t22">
+<div class="dv-thd"><a class="dv-tid" href="#t22">22</a><span class="dv-tname">Perfil — seguridad</span></div>
+<p class="dv-tnote">Contraseña, 2FA y sesiones activas con opción de cerrar sesiones remotas.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="22a">
+<div class="dv-olabel"><a class="dv-oid" href="#22a">22a</a>Seguridad</div>
+<div class="dv-phones">
+<div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+  <div style="height:100%;display:flex;flex-direction:column;background:#0e1113">
+    <div class="mscroll" style="padding:52px 20px 24px">
+      <div style="font:500 13px sans-serif;color:#8a9297;margin-bottom:10px">‹ Perfil</div>
+      <div style="font:700 18px sans-serif;color:#fff;margin-bottom:16px">Seguridad</div>
+
+      <div style="font:600 13px sans-serif;color:#fff;margin-bottom:4px">Contraseña</div>
+      <div style="font:400 11px sans-serif;color:#727b81;margin-bottom:10px">Última actualización: 3 meses atrás</div>
+      <div style="font:600 12px sans-serif;color:#0e1113;background:#3ddbb8;padding:11px;border-radius:10px;text-align:center;margin-bottom:22px">Cambiar contraseña</div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font:600 13px sans-serif;color:#fff">Verificación en dos pasos</div>
+        <div style="width:34px;height:20px;border-radius:10px;background:#202427;position:relative"><div style="width:14px;height:14px;border-radius:50%;background:#727b81;position:absolute;top:3px;left:3px"></div></div>
+      </div>
+      <div style="font:400 11px sans-serif;color:#a9a297;margin-bottom:22px">Desactivada — la recomendamos para proteger tu inversión.</div>
+
+      <div style="font:600 13px sans-serif;color:#fff;margin-bottom:10px">Sesiones activas</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 14px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#3ddbb8;flex:none"></span>
+          <div style="flex:1"><div style="font:600 12.5px sans-serif;color:#f5f6f7">App aluri en este iPhone</div><div style="font:400 10.5px sans-serif;color:#727b81">Bogotá · activa ahora</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#15181b;border:1px solid #202427;border-radius:12px;padding:12px 14px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#525a5f;flex:none"></span>
+          <div style="flex:1"><div style="font:600 12.5px sans-serif;color:#f5f6f7">Chrome en macOS</div><div style="font:400 10.5px sans-serif;color:#727b81">Barranquilla · hace 2 días</div></div>
+          <div style="font:600 11px sans-serif;color:#e7eaec;border:1px solid #2a2f33;padding:5px 10px;border-radius:6px">Cerrar</div>
+        </div>
+      </div>
+      <div style="font:600 13px sans-serif;color:#c94f4f;text-align:center">Cerrar sesión en este dispositivo</div>
+    </div>
+  </div>
+</x-import>
+<div class="dv-phone-lbl">Seguridad</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</x-dc>
+</body>
+</html>
