@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aluri · Portal del Inversionista — prototipo</title>
+<style>
+  :root{
+    --bg:#0e1113; --panel:#15181b; --panel-2:#0a0c0d; --panel-3:#171b1e;
+    --line:#202427; --line-2:#2a2f33; --line-3:#1c2023;
+    --teal:#3ddbb8; --teal-soft:#7fe8cf; --teal-bg:#182220; --teal-line:#23342f;
+    --text:#f5f6f7; --text-2:#e7eaec; --muted:#727b81; --muted-2:#8a9297; --dim:#525a5f; --dim-2:#3a4247;
+    --amber:#c98b4a; --amber-2:#e0a578; --gold:#e9c66b;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+  /* ---------- shell ---------- */
+  .app{display:flex;min-height:100vh}
+  .side{width:230px;flex:none;background:var(--panel-2);border-right:1px solid var(--line-3);
+    display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:0;height:100vh}
+  .logo{font:800 20px var(--sans);letter-spacing:-.5px;color:#fff;margin-bottom:26px;padding:0 8px}
+  .logo span{color:var(--teal)}
+  .nav{display:flex;flex-direction:column;gap:2px;flex:1}
+  .nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font:500 13px var(--sans);color:var(--muted-2)}
+  .nav a .dt{width:7px;height:7px;border-radius:50%;background:#33383b;flex:none}
+  .nav a:hover{color:var(--text-2);background:#12161800}
+  .nav a.active{background:var(--teal-bg);color:var(--teal)}
+  .nav a.active .dt{background:var(--teal)}
+  .userchip{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;background:var(--teal-bg);border:1px solid var(--teal-line);cursor:pointer}
+  .userchip .av{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--teal);display:flex;align-items:center;justify-content:center;font:600 12px var(--sans);flex:none}
+  .userchip .nm{font:600 12.5px var(--sans);color:#fff}
+  .userchip .pc{font:400 10.5px var(--sans);color:var(--teal-soft)}
+
+  .main{flex:1;min-width:0;overflow-x:hidden}
+  .wrap{max-width:1180px;margin:0 auto;padding:30px 40px 80px}
+
+  /* ---------- typography / bits ---------- */
+  .h1{font:700 24px/1.15 var(--sans);color:#fff;margin:0 0 4px}
+  .sub{font:400 13px var(--sans);color:var(--muted);margin:0 0 22px}
+  .section-lbl{font:700 11.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:26px 0 12px}
+  .back{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--sans);color:var(--muted-2);margin-bottom:16px;cursor:pointer}
+  .back:hover{color:var(--text-2)}
+  .muted{color:var(--muted)} .dim{color:var(--dim)} .teal{color:var(--teal)}
+  .disclaimer{font:400 10.5px var(--sans);color:var(--dim-2);margin-top:8px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+  .kpi .lbl{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+  .kpi .val{font:700 24px var(--sans);color:#fff}
+  .kpi .val.tl{color:var(--teal)}
+  .kpi .note{font:400 11.5px var(--sans);color:var(--dim);margin-top:4px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 13px var(--sans);
+    padding:10px 18px;border-radius:9px;border:1px solid var(--line-2);color:var(--text-2);background:var(--panel);transition:.12s}
+  .btn:hover{border-color:#3a4247}
+  .btn.primary{background:var(--teal);color:#0e1113;border-color:var(--teal)}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn.block{width:100%}
+  .btn.sm{padding:7px 14px;font-size:12px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  .chip{font:600 12px var(--sans);color:var(--text-2);border:1px solid var(--line-2);padding:7px 14px;border-radius:20px;cursor:pointer}
+  .chip.on{background:var(--teal);color:#0e1113;border-color:var(--teal)}
+  .badge{display:inline-flex;align-items:center;gap:6px;font:600 10.5px var(--sans);padding:3px 9px;border-radius:5px}
+  .badge.teal{color:var(--teal-soft);background:var(--teal-bg)}
+  .badge.amber{color:var(--amber-2);background:#1a120c}
+  .badge.grey{color:var(--muted-2);background:var(--line)}
+  .badge.yellow{color:#e0d078;background:#241f0c}
+  .stt{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--sans)}
+  .stt .d{width:6px;height:6px;border-radius:50%}
+  .stt.ok{color:var(--teal-soft)} .stt.ok .d{background:var(--teal)}
+  .stt.mora{color:var(--muted-2)} .stt.mora .d{background:var(--amber)}
+  .stt.pend{color:var(--muted-2)} .stt.pend .d{background:#6b7278}
+
+  .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--teal)}
+
+  .row{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 16px}
+  .row.sel{border-color:var(--teal)}
+  .row .rt{flex:1;min-width:0}
+  .row .rt .t{font:600 14px var(--sans);color:var(--text)}
+  .row .rt .s{font:400 11.5px var(--sans);color:var(--dim);margin-top:1px}
+  .list{display:flex;flex-direction:column;gap:8px}
+
+  .tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+  .tabs .tab{font:600 13px var(--sans);color:var(--muted);padding:0 0 10px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
+  .tabs .tab.active{color:var(--teal);border-color:var(--teal)}
+  .tabs .tab .d{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+
+  .field{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 14px;font:500 13px var(--sans);color:var(--text-2);width:100%}
+  .field.select{background:var(--panel);cursor:pointer}
+  .field-lbl{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:.02em;color:var(--dim);margin-bottom:5px}
+  .field-hint{font:400 11px var(--sans);color:var(--dim);margin-top:5px}
+  input.field{outline:none} input.field:focus{border-color:var(--teal)}
+
+  .toggle{width:40px;height:23px;border-radius:12px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:.15s}
+  .toggle i{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:var(--muted);transition:.15s}
+  .toggle.on{background:var(--teal)} .toggle.on i{left:20px;background:#0e1113}
+
+  .ph{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 8px,rgba(255,255,255,.015) 8px 16px);
+    display:flex;align-items:center;justify-content:center;color:#5a6167;font:500 10px ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;border-radius:10px}
+
+  .wsteps{display:flex;align-items:center;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+  .wsteps .st{display:flex;align-items:center;gap:8px}
+  .wsteps .n{width:26px;height:26px;border-radius:50%;border:1px solid #33383b;color:var(--muted);display:flex;align-items:center;justify-content:center;font:700 12px var(--sans)}
+  .wsteps .st.on .n{background:var(--teal);color:#0e1113;border-color:var(--teal)}
+  .wsteps .st.done .n{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+  .wsteps .st .lb{font:600 13px var(--sans);color:var(--muted)}
+  .wsteps .st.on .lb,.wsteps .st.done .lb{color:#fff}
+  .wsteps .sep{width:38px;height:1px;background:var(--line-2)}
+
+  .view{display:none} .view.active{display:block}
+  .step{display:none} .step.active{display:block}
+
+  /* timeline */
+  .tl{display:flex;flex-direction:column}
+  .tl .it{display:flex;gap:16px}
+  .tl .gutter{display:flex;flex-direction:column;align-items:center;flex:none}
+  .tl .gutter .n{width:28px;height:28px;border-radius:50%;border:1px solid #33383b;color:var(--muted);display:flex;align-items:center;justify-content:center;font:700 12px var(--sans)}
+  .tl .it.done .gutter .n{background:var(--teal);color:#0e1113;border-color:var(--teal)}
+  .tl .gutter .ln{width:2px;flex:1;background:var(--line-2);margin:4px 0;min-height:14px}
+  .tl .bd{flex:1;padding-bottom:22px}
+  .tl .bd .th{display:flex;justify-content:space-between;align-items:baseline}
+  .tl .bd .th .tt{font:700 14.5px var(--sans);color:#fff}
+  .tl .it:not(.done) .bd .th .tt{color:var(--muted-2)}
+  .tl .bd .th .dd{font:400 11.5px var(--sans);color:var(--dim)}
+  .tl .bd .tx{font:400 12px var(--sans);color:var(--muted);margin:2px 0 0}
+
+  /* modal */
+  .backdrop{position:fixed;inset:0;background:rgba(4,6,7,.72);display:none;align-items:center;justify-content:center;padding:30px;z-index:50}
+  .backdrop.open{display:flex}
+  .modal{width:440px;max-width:100%;background:var(--panel);border:1px solid #23282c;border-radius:16px;padding:24px 24px 16px;max-height:90vh;overflow:auto}
+  .modal.lg{width:860px}
+  .modal .mh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .modal .mh .x{font:400 16px var(--sans);color:var(--dim);cursor:pointer}
+  .opt-row{display:flex;align-items:center;gap:14px;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:13px 14px;cursor:pointer}
+  .opt-row:hover{border-color:var(--line-2)}
+  .opt-row .ic{width:38px;height:38px;border-radius:50%;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;font:700 12px var(--sans);color:var(--teal);flex:none}
+
+  /* light "paper" extracto */
+  .paper{background:#f7f5f0;color:#1c1b17;border-radius:6px;padding:30px 34px;font-size:12px}
+  .paper .ph-hd{display:flex;justify-content:space-between;border-bottom:2px solid #14312c;padding-bottom:14px;margin-bottom:16px}
+  .paper h4{font:800 20px var(--sans);color:#14312c;margin:0}
+  .paper h4 span{color:#178f7c}
+  .paper table{width:100%;border-collapse:collapse;margin-top:6px}
+  .paper th{font:600 9.5px var(--sans);text-transform:uppercase;color:#84827a;text-align:left;border-bottom:1px solid #e3e0d5;padding:7px 4px}
+  .paper td{font:400 11px var(--sans);color:#2a2924;border-bottom:1px solid #eeece4;padding:6px 4px}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--teal);
+    color:var(--text);font:600 13px var(--sans);padding:12px 18px;border-radius:10px;opacity:0;transition:.25s;z-index:60;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .banner{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+  .banner .d{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+  .hero-num{font:800 42px var(--sans);color:#fff;letter-spacing:-1px}
+  .prose{font:400 12.5px/1.6 var(--sans);color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="side">
+    <div class="logo">aluri<span>.</span></div>
+    <nav class="nav" id="nav">
+      <a data-go="inicio" class="active"><span class="dt"></span>Inicio</a>
+      <a data-go="marketplace"><span class="dt"></span>Marketplace</a>
+      <a data-go="inversiones"><span class="dt"></span>Mis Inversiones</a>
+      <a data-go="notificaciones"><span class="dt"></span>Notificaciones</a>
+    </nav>
+    <div class="userchip" data-go="perfil">
+      <div class="av">OM</div>
+      <div style="flex:1;min-width:0">
+        <div class="nm">Oscar Zapata</div>
+        <div class="pc">Perfil · 44% completo</div>
+      </div>
+      <div style="color:var(--teal)">›</div>
+    </div>
+  </aside>
+
+  <main class="main"><div class="wrap">
+
+    <!-- ================= INICIO ================= -->
+    <section class="view active" id="v-inicio">
+      <div class="h1">Hola, Oscar</div>
+      <div class="sub">Tu portafolio sigue creciendo.</div>
+
+      <div class="card" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap">
+        <div style="flex:none;width:260px">
+          <div class="kpi"><div class="lbl">Capital vigente</div>
+            <div class="val" style="font-size:32px">$200.053.966</div>
+            <div style="font:600 14px var(--sans);color:var(--teal);margin-top:6px">27.89% E.A. neta</div>
+            <div class="note">de $212.500.000 invertido</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:280px;position:relative">
+          <svg viewBox="0 0 520 150" style="width:100%;height:140px;display:block;overflow:visible">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3ddbb8" stop-opacity="0.3"/><stop offset="100%" stop-color="#3ddbb8" stop-opacity="0"/></linearGradient></defs>
+            <line x1="0" y1="128" x2="520" y2="128" stroke="#33383b" stroke-width="1.5" stroke-dasharray="3 5"/>
+            <path d="M0,128 C110,122 190,96 260,72 C340,44 420,18 520,10 L520,150 L0,150 Z" fill="url(#g1)"/>
+            <path d="M0,128 C110,122 190,96 260,72 C340,44 420,18 520,10" fill="none" stroke="#3ddbb8" stroke-width="2.5"/>
+            <circle cx="520" cy="10" r="4.5" fill="#3ddbb8"/>
+          </svg>
+          <div style="position:absolute;top:-6px;right:6px;background:var(--bg);border:1px solid var(--teal);border-radius:8px;padding:6px 10px;text-align:right">
+            <div style="font:700 15px var(--sans);color:var(--teal)">$513.000.000</div>
+            <div style="font:400 10.5px var(--sans);color:var(--muted)">proyectado · jun. 2030</div>
+          </div>
+          <div style="position:absolute;left:0;bottom:-16px;font:400 10.5px var(--sans);color:var(--dim-2)">hoy</div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card kpi"><div class="lbl">Ganancias generadas</div><div class="val tl">$52.131.740</div><div class="note">ya recibidas, desde tu primera inversión</div></div>
+        <div class="card kpi"><div class="lbl">Si todo se paga a tiempo</div><div class="val">$513.000.000</div><div class="note">valor proyectado al vencimiento, jun. 2030</div></div>
+      </div>
+      <div class="disclaimer">Proyección si tus créditos se pagan a tiempo hasta el vencimiento. No garantiza rendimiento.</div>
+
+      <div class="banner" style="margin:20px 0 4px">
+        <span class="d"></span>
+        <div style="flex:1;font:500 13px var(--sans);color:var(--muted-2)">CR005 y CR006 están en mora — $131.500.000 comprometidos</div>
+        <button class="btn sm" data-go="inversiones">Revisar →</button>
+      </div>
+
+      <div class="section-lbl">Tus créditos activos</div>
+      <div class="list">
+        <div class="row" data-credit="CR005" style="cursor:pointer">
+          <div class="rt"><div class="t">Hugo Sebastián Lozano</div><div class="s">CR005 · Casa, Bogotá</div></div>
+          <span class="stt mora"><span class="d"></span>En mora</span>
+          <div style="font:600 14px var(--sans);width:120px;text-align:right">$60.000.000</div>
+        </div>
+        <div class="row" data-credit="CR047" style="cursor:pointer">
+          <div class="rt"><div class="t">Benjamín Rodríguez</div><div class="s">CR047 · Local comercial, Buga</div></div>
+          <span class="stt ok"><span class="d"></span>Al día</span>
+          <div style="font:600 14px var(--sans);width:120px;text-align:right">$71.500.000</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MARKETPLACE ================= -->
+    <section class="view" id="v-marketplace">
+      <div class="h1">Marketplace de Inversión</div>
+      <div class="sub">Elige el crédito hipotecario en el que quieres invertir.</div>
+
+      <div class="grid g3" style="margin-bottom:18px">
+        <div class="card kpi"><div class="lbl">Rentabilidad promedio</div><div class="val tl">27.89% E.A.</div></div>
+        <div class="card kpi"><div class="lbl">Disponible para invertir</div><div class="val">$184.500.000</div></div>
+        <div class="card kpi"><div class="lbl">Oportunidades activas</div><div class="val">6</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap">
+        <div class="field" style="flex:1;min-width:200px;color:var(--dim)">Buscar por ciudad o tipo de inmueble…</div>
+        <div class="field select" style="width:auto">Todos los riesgos ▾</div>
+        <div class="field select" style="width:auto">Mayor rentabilidad ▾</div>
+      </div>
+
+      <div class="grid g3" id="mkt-cards"></div>
+    </section>
+
+    <!-- ================= FONDEO (wizard) ================= -->
+    <section class="view" id="v-fondeo">
+      <div class="back" data-go="marketplace">← Volver al Marketplace</div>
+      <div class="h1">Invertir en casa Bogotá</div>
+      <div class="sub" id="fondeo-sub">28.32% E.A. neta · 48 meses · Riesgo B1</div>
+
+      <div class="wsteps" id="wsteps">
+        <div class="st on" data-s="1"><div class="n">1</div><div class="lb">Monto</div></div>
+        <div class="sep"></div>
+        <div class="st" data-s="2"><div class="n">2</div><div class="lb">Cuenta bancaria</div></div>
+        <div class="sep"></div>
+        <div class="st" data-s="3"><div class="n">3</div><div class="lb">Confirmar</div></div>
+      </div>
+
+      <!-- step 1 -->
+      <div class="step active" data-step="1">
+        <div class="grid" style="grid-template-columns:1fr 1.3fr;gap:24px">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="ph" style="height:120px;border-radius:0">foto inmueble</div>
+            <div style="padding:14px 16px">
+              <div style="font:600 13px var(--sans)">Casa · Bogotá</div>
+              <div style="display:flex;justify-content:space-between;margin-top:10px;font:400 11.5px var(--sans);color:var(--muted)"><span>Garantía</span><b style="color:var(--text-2)">1.7×</b></div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font:400 11.5px var(--sans);color:var(--muted)"><span>Disponible</span><b style="color:var(--text-2)">$30.600.000</b></div>
+            </div>
+          </div>
+          <div>
+            <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">¿Cuánto quieres invertir?</div>
+            <div style="display:flex;align-items:baseline;gap:6px;background:var(--panel);border:1px solid var(--teal);border-radius:12px;padding:16px 18px;margin-bottom:12px">
+              <span style="font:700 26px var(--sans);color:var(--muted)">$</span>
+              <span style="font:700 30px var(--sans);color:#fff" id="montoBig">10.000.000</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="montoChips">
+              <div class="chip" data-m="5000000">$5.000.000</div>
+              <div class="chip on" data-m="10000000">$10.000.000</div>
+              <div class="chip" data-m="20000000">$20.000.000</div>
+              <div class="chip" data-m="30600000">Monto máximo</div>
+            </div>
+            <div style="background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:12px;padding:16px 18px;margin-bottom:20px">
+              <div style="font:600 11px var(--sans);color:var(--teal-soft);text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px" id="projHdr">Con $10.000.000 durante 48 meses</div>
+              <div style="display:flex;gap:26px;flex-wrap:wrap">
+                <div><div style="font:400 11px var(--sans);color:#a9c9be">Recibes al mes</div><div style="font:700 18px var(--sans);color:#fff" id="projMes">≈ $210.000</div></div>
+                <div><div style="font:400 11px var(--sans);color:#a9c9be">Ganancia total</div><div style="font:700 18px var(--sans);color:var(--teal)" id="projGan">$10.080.000</div></div>
+                <div><div style="font:400 11px var(--sans);color:#a9c9be">Al final recibes</div><div style="font:700 18px var(--sans);color:#fff" id="projFin">$20.080.000</div></div>
+              </div>
+            </div>
+            <button class="btn primary block" data-next="2">Continuar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- step 2 -->
+      <div class="step" data-step="2">
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">¿A qué cuenta te desembolsamos los pagos mensuales?</div>
+        <div class="muted" style="font-size:12px;margin-bottom:16px">Aquí llegarán tus intereses y, al final del plazo, tu capital.</div>
+        <div class="list" style="max-width:540px" id="acctList">
+          <label class="row sel"><input type="radio" name="acct" checked style="accent-color:var(--teal)">
+            <div class="rt"><div class="t">Bancolombia · Ahorros</div><div class="s">Terminada en 1234 · Oscar Mauricio Zapata</div></div>
+            <span class="badge teal">Principal</span></label>
+          <label class="row"><input type="radio" name="acct" style="accent-color:var(--teal)">
+            <div class="rt"><div class="t">Davivienda · Corriente</div><div class="s">Terminada en 8890 · Oscar Mauricio Zapata</div></div></label>
+          <div class="row" style="justify-content:center;border-style:dashed;color:var(--muted-2);font:600 13px var(--sans);cursor:pointer" data-go="perfil-cuenta-nueva">+ Agregar nueva cuenta bancaria</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:24px;max-width:540px">
+          <button class="btn" data-prev="1">Volver</button>
+          <button class="btn primary" style="flex:1" data-next="3">Continuar</button>
+        </div>
+      </div>
+
+      <!-- step 3 -->
+      <div class="step" data-step="3">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge teal">CR112</span><span class="badge yellow">En proceso</span>
+        </div>
+        <div class="h1" style="font-size:22px">Tu inversión de <span id="confMonto">$10.000.000</span> en casa Bogotá</div>
+        <div class="card" style="margin:16px 0 26px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+          <div>
+            <div style="font:600 11px var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Fecha estimada de desembolso</div>
+            <div style="font:700 26px var(--sans);color:var(--teal)">22 de septiembre, 2026</div>
+          </div>
+          <div style="text-align:right;font:400 12px var(--sans);color:var(--muted);max-width:220px">Basado en el promedio de procesos similares: 18 días hábiles desde hoy.</div>
+        </div>
+
+        <div class="tl">
+          <div class="it done"><div class="gutter"><div class="n">1</div><div class="ln"></div></div>
+            <div class="bd"><div class="th"><div class="tt">Firmas</div><div class="dd">28 ago – 1 sept</div></div>
+              <div class="tx">Documentos privados y documento público firmados.</div>
+              <div class="list" style="margin-top:12px">
+                <div class="row" style="padding:11px 14px"><span class="stt ok"><span class="d"></span></span><div class="rt"><div class="t" style="font-size:13px">Contratos privados (mutuo y administración)</div></div><span class="stt ok">Firmados</span></div>
+                <div class="row" style="padding:12px 14px;border-color:var(--teal);flex-direction:column;align-items:stretch;gap:10px">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#e0d078"></span>
+                    <div style="flex:1;font:500 13px var(--sans);color:var(--text-2)">Escritura pública (minuta) — firma en notaría</div>
+                    <span style="font:600 11.5px var(--sans);color:#e0d078">Por programar</span></div>
+                  <button class="btn primary sm" data-go="firma" style="align-self:flex-start">Programar firma</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="it"><div class="gutter"><div class="n">2</div><div class="ln"></div></div>
+            <div class="bd"><div class="th"><div class="tt">Proceso de notaría</div><div class="dd">2 – 8 sept</div></div>
+              <div class="tx">Desde la firma de todos los comparecientes hasta la boleta de registro.</div></div></div>
+          <div class="it"><div class="gutter"><div class="n">3</div><div class="ln"></div></div>
+            <div class="bd"><div class="th"><div class="tt">Registro público</div><div class="dd">9 – 19 sept</div></div>
+              <div class="tx">Desde la boleta de registro hasta el certificado de libertad y tradición.</div></div></div>
+          <div class="it"><div class="gutter"><div class="n">4</div></div>
+            <div class="bd" style="padding-bottom:0"><div class="th"><div class="tt">Desembolso</div><div class="dd">22 sept</div></div>
+              <div class="tx">1 día hábil después de recibir el certificado registrado.</div>
+              <button class="btn sm" style="margin-top:12px" data-go="desembolso">Ver pantalla de desembolso</button></div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:22px">
+          <button class="btn" data-prev="2">Volver</button>
+          <button class="btn primary" data-go="inversiones">Ir a Mis Inversiones</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MIS INVERSIONES ================= -->
+    <section class="view" id="v-inversiones">
+      <div class="h1">Mis Inversiones</div>
+      <div class="sub">Panel de tu portafolio · 5 inversiones, 4 activas</div>
+
+      <div class="card" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap">
+        <div style="flex:none;width:240px">
+          <div class="kpi"><div class="lbl">Capital invertido</div><div class="val" style="font-size:30px">$312.500.000</div>
+            <div class="note">27.89% E.A. neta promedio</div></div>
+        </div>
+        <div style="flex:1;min-width:280px;position:relative">
+          <svg viewBox="0 0 520 150" style="width:100%;height:140px;display:block;overflow:visible">
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3ddbb8" stop-opacity="0.3"/><stop offset="100%" stop-color="#3ddbb8" stop-opacity="0"/></linearGradient></defs>
+            <line x1="0" y1="128" x2="520" y2="128" stroke="#33383b" stroke-width="1.5" stroke-dasharray="3 5"/>
+            <path d="M0,128 C110,120 190,90 260,64 C340,34 420,14 520,6 L520,150 L0,150 Z" fill="url(#g2)"/>
+            <path d="M0,128 C110,120 190,90 260,64 C340,34 420,14 520,6" fill="none" stroke="#3ddbb8" stroke-width="2.5"/>
+            <circle cx="520" cy="6" r="4.5" fill="#3ddbb8"/>
+          </svg>
+          <div style="position:absolute;top:-6px;right:6px;background:var(--bg);border:1px solid var(--teal);border-radius:8px;padding:6px 10px;text-align:right">
+            <div style="font:700 15px var(--sans);color:var(--teal)">$801.000.000</div>
+            <div style="font:400 10.5px var(--sans);color:var(--muted)">proyectado · jun. 2030</div>
+          </div>
+        </div>
+      </div>
+      <div class="disclaimer">Proyección de valor total (capital + intereses) si todos tus créditos se pagan a tiempo. No garantiza rendimiento.</div>
+
+      <div class="grid g3" style="margin-top:16px">
+        <div class="card kpi" style="background:var(--teal-bg);border-color:var(--teal-line)"><div class="lbl">Recibes este mes</div><div class="val tl">$2.185.290</div><div class="note">4 pagos programados</div></div>
+        <div class="card kpi"><div class="lbl">Ganancias generadas</div><div class="val">$52.131.740</div><div class="note">ya recibidas en total</div></div>
+        <div class="card kpi"><div class="lbl">Próximo pago</div><div class="val">$1.097.870</div><div class="note">3 sept · CR047</div></div>
+      </div>
+
+      <div class="card" style="display:flex;align-items:center;gap:16px;margin:22px 0 0;cursor:pointer" data-go="diversificacion">
+        <svg width="46" height="46" viewBox="0 0 42 42" style="flex:none">
+          <circle cx="21" cy="21" r="15.5" fill="none" stroke="#202427" stroke-width="7"/>
+          <circle cx="21" cy="21" r="15.5" fill="none" stroke="#3ddbb8" stroke-width="7" stroke-dasharray="34 97" transform="rotate(-90 21 21)"/>
+          <circle cx="21" cy="21" r="15.5" fill="none" stroke="#2c8f7c" stroke-width="7" stroke-dasharray="27 97" stroke-dashoffset="-34" transform="rotate(-90 21 21)"/>
+          <circle cx="21" cy="21" r="15.5" fill="none" stroke="#1f5e52" stroke-width="7" stroke-dasharray="20 97" stroke-dashoffset="-61" transform="rotate(-90 21 21)"/>
+        </svg>
+        <div style="flex:1"><div style="font:700 14px var(--sans);color:#fff">Diversificación de tu portafolio</div>
+          <div style="font:400 12px var(--sans);color:var(--muted);margin-top:2px">Por ciudad, tipo de inmueble, plazo, modalidad y más — toda dentro de aluri</div></div>
+        <div style="font:600 12.5px var(--sans);color:var(--teal);white-space:nowrap">Ver detalle →</div>
+      </div>
+
+      <div class="section-lbl">Próximos vencimientos</div>
+      <div class="list">
+        <div class="row"><div style="font:600 12px var(--sans);width:74px">3 sept</div><div class="rt"><div class="t" style="font-size:13px;font-weight:500;color:var(--muted-2)">Interés · CR047, Benjamín Rodríguez</div></div><div style="font:600 13px var(--sans);color:var(--teal)">$1.097.870</div></div>
+        <div class="row"><div style="font:600 12px var(--sans);width:74px">15 sept</div><div class="rt"><div class="t" style="font-size:13px;font-weight:500;color:var(--muted-2)">Interés · CR054</div></div><div style="font:600 13px var(--sans);color:var(--teal)">$420.000</div></div>
+        <div class="row"><div style="font:600 12px var(--sans);width:74px">dic. 2029</div><div class="rt"><div class="t" style="font-size:13px;font-weight:500;color:var(--muted-2)">Vencimiento · CR047 devuelve el capital completo</div></div><div style="font:600 13px var(--sans)">$71.500.000</div></div>
+      </div>
+
+      <div class="section-lbl">Tus créditos</div>
+      <div class="tabs" style="margin-bottom:14px">
+        <div class="tab active">Activas (4)</div><div class="tab">Historial (1)</div>
+      </div>
+      <div class="list">
+        <div class="row" data-credit="CR005" style="cursor:pointer">
+          <div class="rt"><div class="t">Hugo Sebastián Lozano</div><div class="s">CR005</div></div>
+          <div style="width:120px;font:600 13px var(--sans)">$60.000.000</div>
+          <div style="width:70px;font:600 13px var(--sans);color:var(--teal)">34.5%</div>
+          <span class="stt mora"><span class="d"></span>En mora</span>
+        </div>
+        <div class="row" data-credit="CR047" style="cursor:pointer">
+          <div class="rt"><div class="t">Benjamín Rodríguez</div><div class="s">CR047</div></div>
+          <div style="width:120px;font:600 13px var(--sans)">$71.500.000</div>
+          <div style="width:70px;font:600 13px var(--sans);color:var(--teal)">25.3%</div>
+          <span class="stt ok"><span class="d"></span>Al día</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DIVERSIFICACIÓN ================= -->
+    <section class="view" id="v-diversificacion">
+      <div class="back" data-go="inversiones">‹ Mis Inversiones</div>
+      <div class="h1">Diversificación de tu portafolio</div>
+      <div class="sub">No diversificas entre productos — diversificas entre deudores, ciudades, plazos y tipos de garantía. Todo dentro de aluri.</div>
+
+      <div class="grid g3" style="margin:18px 0">
+        <div class="card">
+          <div class="section-lbl" style="margin:0 0 14px">Por ciudad</div>
+          <div style="display:flex;align-items:center;gap:16px">
+            <svg width="96" height="96" viewBox="0 0 42 42" style="flex:none">
+              <circle cx="21" cy="21" r="15.5" fill="none" stroke="#202427" stroke-width="7"/>
+              <circle cx="21" cy="21" r="15.5" fill="none" stroke="#3ddbb8" stroke-width="7" stroke-dasharray="33 97" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.5" fill="none" stroke="#2c8f7c" stroke-width="7" stroke-dasharray="26 97" stroke-dashoffset="-33" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.5" fill="none" stroke="#1f5e52" stroke-width="7" stroke-dasharray="19 97" stroke-dashoffset="-59" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.5" fill="none" stroke="#3a4247" stroke-width="7" stroke-dasharray="19 97" stroke-dashoffset="-78" transform="rotate(-90 21 21)"/>
+            </svg>
+            <div style="display:flex;flex-direction:column;gap:6px;font:500 11.5px var(--sans);color:#c8ccce">
+              <div>■ Bogotá · 34%</div><div>■ Buga · 27%</div><div>■ Chía · 20%</div><div>■ Otras · 19%</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-lbl" style="margin:0 0 14px">Por tipo de inmueble</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>Casa</span><span>41%</span></div><div class="bar"><i style="width:41%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>Local</span><span>27%</span></div><div class="bar"><i style="width:27%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>Apto</span><span>19%</span></div><div class="bar"><i style="width:19%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>Bodega</span><span>13%</span></div><div class="bar"><i style="width:13%"></i></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-lbl" style="margin:0 0 14px">Por plazo</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>12–24 meses</span><span>15%</span></div><div class="bar"><i style="width:15%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>25–48 meses</span><span>52%</span></div><div class="bar"><i style="width:52%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 12px var(--sans);color:#c8ccce;margin-bottom:4px"><span>49–84 meses</span><span>33%</span></div><div class="bar"><i style="width:33%"></i></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--teal-bg);border-color:var(--teal-line);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+        <div><div style="font:600 12.5px var(--sans);color:#a9c9be;margin-bottom:4px">Tu mayor concentración por deudor es 27% en un solo crédito (CR047).</div>
+          <div style="font:400 12px var(--sans);color:var(--teal-soft)">Diversificar más en ciudades y plazos distintos no cambia tu rentabilidad — pero sí lo que recibes cada mes, de forma más estable.</div></div>
+        <button class="btn primary" data-go="marketplace">Explorar Marketplace</button>
+      </div>
+    </section>
+
+    <!-- ================= DETALLE DE CRÉDITO ================= -->
+    <section class="view" id="v-credito">
+      <div class="back" data-go="inversiones">← Volver a Mis Inversiones</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px" id="cr-badges"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div><div class="h1" id="cr-name">Hugo Sebastián Lozano</div>
+          <div class="muted" style="font-size:12.5px" id="cr-prop">Casa · Chía, Cundinamarca</div></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn primary sm" id="cr-contact">Contactar a aluri</button>
+          <button class="btn sm" id="cr-extract">Extracto</button>
+        </div>
+      </div>
+
+      <div class="tabs" id="cr-tabs" style="margin-top:18px">
+        <div class="tab active" data-t="detalles">Detalles</div>
+        <div class="tab" data-t="abonos">Abonos</div>
+        <div class="tab" data-t="documentos">Documentos</div>
+        <div class="tab" data-t="cobranza"><span class="d"></span>Cobranza</div>
+      </div>
+
+      <!-- detalles -->
+      <div class="ctab" data-tab="detalles">
+        <div class="grid" style="grid-template-columns:1.1fr 1fr;gap:16px;margin-bottom:14px">
+          <div class="ph" style="height:280px">foto inmueble 1 / 2</div>
+          <div class="card" style="display:flex;flex-direction:column;gap:14px">
+            <div class="grid g2" style="gap:12px">
+              <div><div class="field-lbl">Mi inversión</div><div style="font:700 22px var(--sans)">$60.000.000</div></div>
+              <div><div class="field-lbl">Rentabilidad</div><div style="font:700 22px var(--sans);color:var(--teal)">34.5%</div></div>
+              <div><div class="field-lbl">Plazo</div><div style="font:700 22px var(--sans)">24 meses</div></div>
+              <div><div class="field-lbl">Cuota mensual</div><div style="font:700 22px var(--sans)">$1.492.000</div></div>
+            </div>
+            <div style="height:1px;background:var(--line)"></div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font:600 11px var(--sans);color:var(--muted);text-transform:uppercase;margin-bottom:6px"><span>Capital recuperado</span><span style="color:var(--text-2)">0%</span></div>
+              <div class="bar"><i style="width:0%"></i></div>
+              <div style="font:400 11px var(--sans);color:var(--dim);margin-top:5px">Recibido $0 de $60.000.000</div>
+            </div>
+            <div style="background:var(--teal-bg);border-radius:9px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font:600 13px var(--sans);color:var(--teal-soft)">Intereses ganados</span>
+              <span style="font:700 16px var(--sans);color:var(--teal)">$19.500.000</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-lbl" style="margin:0 0 12px">Información del crédito</div>
+          <div class="grid g4" style="gap:16px 24px">
+            <div><div class="field-lbl">Ubicación</div><div style="font:600 13px var(--sans);color:var(--text-2)">Chía, Calle 2 #1c-00</div></div>
+            <div><div class="field-lbl">Tipo de predio</div><div style="font:600 13px var(--sans);color:var(--text-2)">Casa</div></div>
+            <div><div class="field-lbl">Avalúo comercial</div><div style="font:600 13px var(--sans);color:var(--text-2)">$350.000.000</div></div>
+            <div><div class="field-lbl">Tipo de crédito</div><div style="font:600 13px var(--sans);color:var(--text-2)">Solo intereses</div></div>
+            <div><div class="field-lbl">Fecha de firma</div><div style="font:600 13px var(--sans);color:var(--text-2)">20 jul. 2025</div></div>
+            <div><div class="field-lbl">Fecha de desembolso</div><div style="font:600 13px var(--sans);color:var(--text-2)">22 jul. 2025</div></div>
+            <div><div class="field-lbl">Siguiente pago</div><div style="font:600 13px var(--sans);color:var(--text-2)">22 ago. 2026</div></div>
+            <div><div class="field-lbl">Ganancia esperada total</div><div style="font:600 13px var(--sans);color:var(--teal)">$35.568.000</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- abonos -->
+      <div class="ctab" data-tab="abonos" hidden>
+        <div class="grid g3" style="margin-bottom:20px">
+          <div class="card kpi"><div class="lbl">Recibido hasta hoy</div><div class="val tl">$19.396.000</div><div class="note">13 de 24 cuotas</div></div>
+          <div class="card kpi"><div class="lbl">Próxima cuota</div><div class="val">$1.492.000</div><div class="note">23 ago 2026</div></div>
+          <div class="card kpi"><div class="lbl">Capital pendiente</div><div class="val">$60.000.000</div><div class="note">se recibe completo al mes 24</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+          <div style="display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:3px" id="abonoToggle">
+            <div class="chip on" data-v="crono" style="border:0;border-radius:7px;padding:7px 14px">Cronograma</div>
+            <div class="chip" data-v="pagos" style="border:0;border-radius:7px;padding:7px 14px">Pagos recibidos</div>
+          </div>
+          <div class="dim" style="font-size:12px">Tu participación: 50.0%</div>
+        </div>
+        <div class="list" id="abonoRows"></div>
+        <div class="disclaimer">La última cuota incluye el capital completo ($60.000.000) — por eso es más alta que el resto.</div>
+      </div>
+
+      <!-- documentos -->
+      <div class="ctab" data-tab="documentos" hidden>
+        <div class="dim" style="font-size:12px;margin-bottom:16px">3 de 3 documentos firmados — este crédito está completamente formalizado.</div>
+        <div class="list" id="docRows"></div>
+      </div>
+
+      <!-- cobranza -->
+      <div class="ctab" data-tab="cobranza" hidden>
+        <div class="grid g3" style="margin-bottom:16px">
+          <div class="card kpi"><div class="lbl">Días en mora</div><div class="val" style="color:var(--amber-2)">12</div></div>
+          <div class="card kpi"><div class="lbl">Monto en mora</div><div class="val">$1.830.000</div></div>
+          <div class="card kpi"><div class="lbl">Próxima acción</div><div class="val">30 ago</div></div>
+        </div>
+        <div class="card" style="background:var(--teal-bg);border-color:var(--teal-line);font:500 12.5px var(--sans);color:#a9c9be;margin-bottom:22px">
+          Nuestro equipo de cobranza está gestionando este crédito activamente. Te avisaremos de cualquier acuerdo o cambio de estado.
+        </div>
+        <div class="section-lbl">Historial de gestión</div>
+        <div class="tl">
+          <div class="it done"><div class="gutter"><div class="n" style="width:8px;height:8px;padding:0;border:0;background:var(--teal)"></div><div class="ln"></div></div>
+            <div class="bd"><div class="th"><div class="tt" style="font-size:13px">Llamada realizada · <span class="muted" style="font-weight:500;font-size:11.5px">Agente de cobranza (humano)</span></div><div class="dd">26 ago, 3:40pm</div></div>
+              <div class="tx" style="color:var(--muted-2)">El deudor se comprometió a pagar antes del 30 de agosto.</div>
+              <span class="badge teal" style="margin-top:6px">Acuerdo alcanzado</span></div></div>
+          <div class="it done"><div class="gutter"><div class="n" style="width:8px;height:8px;padding:0;border:0;background:#525a5f"></div><div class="ln"></div></div>
+            <div class="bd"><div class="th"><div class="tt" style="font-size:13px">Recordatorio enviado · <span class="muted" style="font-weight:500;font-size:11.5px">Asistente aluri (IA)</span></div><div class="dd">20 ago, 9:05am</div></div>
+              <div class="tx" style="color:var(--muted-2)">Mensaje automático por WhatsApp y correo con el estado de la cuota vencida.</div></div></div>
+          <div class="it done"><div class="gutter"><div class="n" style="width:8px;height:8px;padding:0;border:0;background:#525a5f"></div></div>
+            <div class="bd" style="padding-bottom:0"><div class="th"><div class="tt" style="font-size:13px">Cuota #14 venció sin pago</div><div class="dd">18 ago</div></div>
+              <div class="tx" style="color:var(--muted-2)">Se inicia el proceso de gestión de cobranza.</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FIRMA ================= -->
+    <section class="view" id="v-firma">
+      <div class="back" data-go="fondeo">← Volver a tu proceso</div>
+      <div class="h1" style="font-size:20px">Firma de la escritura pública</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:22px"><span class="stt ok"><span class="d"></span></span><span style="font:500 12.5px var(--sans);color:var(--teal-soft)">100% fondeada — ya puedes programar</span></div>
+
+      <div style="display:flex;gap:8px;margin-bottom:20px" id="firmaMode">
+        <div class="chip on" data-mode="notaria">Presencial en notaría</div>
+        <div class="chip" data-mode="domicilio">A domicilio</div>
+      </div>
+
+      <div data-firma="notaria">
+        <div class="card" style="margin-bottom:20px">
+          <div class="field-lbl">Notaría asignada</div>
+          <div style="font:600 15px var(--sans);color:var(--muted-2)">Por definir</div>
+          <div class="field-hint">El equipo de aluri aún no ha asignado la notaría — te confirmamos la dirección antes de tu cita, sin que tengas que reprogramar.</div>
+        </div>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">Elige día</div>
+        <div style="display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap">
+          <div class="chip">Mar 2 sept</div><div class="chip on">Mié 3 sept</div><div class="chip">Jue 4 sept</div>
+        </div>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">Elige franja horaria</div>
+        <div style="display:flex;gap:8px;margin:0 0 24px;flex-wrap:wrap">
+          <div class="chip">8–10am</div><div class="chip on">10am–12pm</div><div class="chip">2–4pm</div><div class="chip">4–6pm</div>
+        </div>
+        <button class="btn primary block" style="max-width:420px" data-go="desembolso">Confirmar cita</button>
+      </div>
+
+      <div data-firma="domicilio" hidden>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">¿Mañana o tarde?</div>
+        <div style="display:flex;gap:8px;margin:0 0 18px"><div class="chip on">Mañana (AM)</div><div class="chip">Tarde (PM)</div></div>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">Elige un bloque de 2 horas</div>
+        <div style="display:flex;gap:8px;margin-bottom:6px"><div class="chip">8am – 10am</div><div class="chip on">10am – 12pm</div></div>
+        <div class="field-hint" style="margin-bottom:22px">No agendamos entre 12m y 2pm — es la hora de almuerzo del equipo notarial.</div>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">Dirección de la firma</div>
+        <input class="field" style="max-width:420px;margin-bottom:6px" value="Calle 93 #14-20, Bogotá">
+        <div class="field-hint" style="margin-bottom:18px">Barrio y ciudad, tal como aparecen en tu documento de identidad.</div>
+        <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">Indicaciones para llegar</div>
+        <textarea class="field" style="max-width:420px;min-height:64px;margin-bottom:6px">Ej: Torre B, piso 4, oficina 402. Anunciarse en recepción como visita de aluri.</textarea>
+        <div class="field-hint" style="margin-bottom:22px">Cualquier detalle que evite que el notario llegue y no sepa a dónde ir.</div>
+        <button class="btn primary block" style="max-width:420px" data-go="desembolso">Confirmar dirección y horario</button>
+      </div>
+    </section>
+
+    <!-- ================= DESEMBOLSO (celebración) ================= -->
+    <section class="view" id="v-desembolso">
+      <div style="position:relative;height:220px;overflow:hidden;border-radius:14px;margin-bottom:-40px">
+        <div class="ph" style="position:absolute;inset:0;align-items:flex-start;padding-top:16px;border-radius:0">foto inmueble</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,17,19,0) 30%,rgba(14,17,19,.96) 92%)"></div>
+        <div style="position:absolute;left:24px;bottom:20px;right:24px">
+          <span class="badge teal" style="background:var(--teal);color:#0e1113">Desembolsado hoy</span>
+          <div style="font:800 28px var(--sans);color:#fff;margin-top:10px;letter-spacing:-.5px">Ya eres inversionista en casa Bogotá</div>
+          <div style="font:400 13px var(--sans);color:#c7cbcd;margin-top:4px">CR112 · 28.32% E.A. neta · 48 meses</div>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:20px;align-items:start;position:relative">
+        <div class="card" style="position:relative;overflow:hidden;padding:28px 30px">
+          <div style="position:absolute;top:-90px;left:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(61,219,184,.28),transparent 70%)"></div>
+          <div style="position:relative">
+            <div style="font:600 11px var(--sans);color:var(--teal-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Desembolsado a tu cuenta</div>
+            <div class="hero-num">$10.000.000</div>
+            <div style="font:400 13px var(--sans);color:var(--muted-2);margin-top:6px">Bancolombia · Ahorros ••1234</div>
+            <div style="display:flex;gap:28px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line-2);flex-wrap:wrap">
+              <div><div class="field-lbl">Primer pago</div><div style="font:700 15px var(--sans)">23 oct 2026</div></div>
+              <div><div class="field-lbl">Recibes al mes</div><div style="font:700 15px var(--sans);color:var(--teal)">≈ $210.000</div></div>
+              <div><div class="field-lbl">Al final recibes</div><div style="font:700 15px var(--sans)">$20.080.000</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 24px">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(160deg,#e9c66b,#b8862f);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(184,134,47,.4);margin-bottom:12px">
+            <div style="width:46px;height:46px;border-radius:50%;border:2px solid #f3dfa3;display:flex;align-items:center;justify-content:center;font:800 9px var(--sans);color:#3a2a08">REGISTRO</div>
+          </div>
+          <div style="font:700 14px var(--sans);color:#f3dfa3">Escritura registrada</div>
+          <div style="font:400 11.5px var(--sans);color:var(--muted);margin-top:4px">Certificado de libertad y tradición al día — tu garantía quedó formalizada.</div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;margin-top:24px">
+        <div style="display:flex;align-items:center;gap:8px;flex:1"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal);color:#0e1113;display:flex;align-items:center;justify-content:center;font:800 10px var(--sans)">✓</span><span style="font:600 12.5px var(--sans)">Firmas</span></div>
+        <div style="flex:.4;height:1px;background:var(--teal)"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:center"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal);color:#0e1113;display:flex;align-items:center;justify-content:center;font:800 10px var(--sans)">✓</span><span style="font:600 12.5px var(--sans)">Notaría</span></div>
+        <div style="flex:.4;height:1px;background:var(--teal)"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:center"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal);color:#0e1113;display:flex;align-items:center;justify-content:center;font:800 10px var(--sans)">✓</span><span style="font:600 12.5px var(--sans)">Registro</span></div>
+        <div style="flex:.4;height:1px;background:var(--teal)"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal);color:#0e1113;display:flex;align-items:center;justify-content:center;font:800 10px var(--sans)">✓</span><span style="font:600 12.5px var(--sans)">Desembolso</span></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px">
+        <button class="btn primary" data-go="inversiones">Ver mi inversión</button>
+        <button class="btn" data-toast="Enlace de compartir copiado">Compartir</button>
+      </div>
+    </section>
+
+    <!-- ================= NOTIFICACIONES ================= -->
+    <section class="view" id="v-notificaciones">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <div><div class="h1">Notificaciones</div><div class="sub">3 sin leer</div></div>
+        <button class="btn sm" data-toast="Todo marcado como leído">Marcar todo como leído</button>
+      </div>
+
+      <div class="section-lbl" style="margin-top:0">Hoy</div>
+      <div class="list" style="margin-bottom:22px">
+        <div class="row" style="border-color:var(--teal)"><span style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge teal">Desembolso</span><span style="font:600 13.5px var(--sans)">Tu inversión en casa Bogotá fue desembolsada</span></div>
+            <div class="s">CR112 · a tu cuenta Bancolombia ••1234</div></div>
+          <div style="font:700 15px var(--sans);color:var(--teal);white-space:nowrap">$10.000.000</div>
+          <button class="btn sm" data-go="desembolso">Ver</button></div>
+        <div class="row" style="border-color:var(--teal)"><span style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge teal">Pago recibido</span><span style="font:600 13.5px var(--sans)">Nuevo abono en tu cuenta</span></div>
+            <div class="s">CR047 · Benjamín Rodríguez</div></div>
+          <div style="font:700 15px var(--sans);color:var(--teal);white-space:nowrap">$1.452.000</div></div>
+      </div>
+
+      <div class="section-lbl">Esta semana</div>
+      <div class="list" style="margin-bottom:22px">
+        <div class="row"><span style="width:7px;height:7px;border-radius:50%;background:#525a5f;flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge grey">Firma</span><span style="font:600 13.5px var(--sans);color:var(--text-2)">Tu cita quedó agendada</span></div>
+            <div class="s">CR112 · 3 sept, 10am–12pm, notaría por confirmar</div></div><div class="dim" style="font-size:11.5px">ayer</div></div>
+        <div class="row"><span style="width:7px;height:7px;border-radius:50%;background:#525a5f;flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge grey">Cobranza</span><span style="font:600 13.5px var(--sans);color:var(--text-2)">Acuerdo alcanzado con el deudor</span></div>
+            <div class="s">CR006 · se comprometió a pagar antes del 30 de agosto</div></div><div class="dim" style="font-size:11.5px">2 días</div></div>
+        <div class="row"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge grey">Mora</span><span style="font:600 13.5px var(--sans);color:var(--text-2)">CR005 entró en mora</span></div>
+            <div class="s">1 cuota vencida · ya estamos gestionando el cobro</div></div><div class="dim" style="font-size:11.5px">3 días</div></div>
+      </div>
+
+      <div class="section-lbl">Antes</div>
+      <div class="list">
+        <div class="row" style="opacity:.75"><span style="width:7px;height:7px;border-radius:50%;background:#525a5f;flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge grey">Marketplace</span><span style="font:600 13.5px var(--sans);color:var(--text-2)">Nueva oportunidad como las tuyas</span></div>
+            <div class="s">Casa en Chía · 29.4% E.A. · Riesgo B1</div></div><div class="dim" style="font-size:11.5px">5 días</div></div>
+        <div class="row" style="opacity:.75"><span style="width:7px;height:7px;border-radius:50%;background:#525a5f;flex:none"></span>
+          <div class="rt"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span class="badge grey">Documento</span><span style="font:600 13.5px var(--sans);color:var(--text-2)">Tu extracto de agosto ya está listo</span></div>
+            <div class="s">CR005</div></div><div class="dim" style="font-size:11.5px">6 días</div></div>
+      </div>
+    </section>
+
+    <!-- ================= PERFIL ================= -->
+    <section class="view" id="v-perfil">
+      <div class="h1">Perfil</div>
+      <div class="sub">Tu información, documentos de cuenta y seguridad — todo en un solo lugar.</div>
+
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:26px" id="perfilLayout">
+        <div style="display:flex;flex-direction:column;gap:2px" id="perfilNav">
+          <div class="pnav active" data-p="personales">Datos personales</div>
+          <div class="pnav" data-p="adicionales">Datos adicionales</div>
+          <div class="pnav" data-p="documentos">Documentos</div>
+          <div class="pnav" data-p="cuentas">Cuentas bancarias</div>
+          <div class="pnav" data-p="seguridad">Seguridad</div>
+        </div>
+        <div style="max-width:640px">
+
+          <div class="ptab" data-p="personales">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font:700 15px var(--sans);color:#fff">Datos personales</div>
+              <button class="btn sm">Editar</button>
+            </div>
+            <div class="card grid g3" style="gap:16px 24px">
+              <div><div class="field-lbl">Nombre completo</div><div style="font:600 13px var(--sans);color:var(--text-2)">Oscar Mauricio Zapata</div></div>
+              <div><div class="field-lbl">Cédula</div><div style="font:600 13px var(--sans);color:var(--text-2)">CC 1018512472</div></div>
+              <div><div class="field-lbl">Correo</div><div style="font:600 13px var(--sans);color:var(--text-2)">oscarmauriciozapata@gmail.com</div></div>
+              <div><div class="field-lbl">Teléfono</div><div style="font:600 13px var(--sans);color:var(--text-2)">315 266 2035</div></div>
+              <div><div class="field-lbl">Ciudad</div><div style="font:600 13px var(--sans);color:var(--text-2)">Barranquilla</div></div>
+              <div><div class="field-lbl">Dirección</div><div class="dim" style="font:600 13px var(--sans)">+ Agregar</div></div>
+            </div>
+          </div>
+
+          <div class="ptab" data-p="adicionales" hidden>
+            <div style="font:700 15px var(--sans);color:#fff;margin-bottom:4px">Datos adicionales</div>
+            <div class="muted" style="font-size:12.5px;margin-bottom:6px">Nos ayudan a evaluarte mejor como inversionista y a priorizarte en nuevas oportunidades.</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+              <div class="bar" style="flex:1"><i style="width:44%"></i></div>
+              <div style="font:600 12px var(--sans);color:var(--teal);white-space:nowrap">4 de 9 completos</div>
+            </div>
+            <div class="section-lbl" style="margin-top:0">Sobre ti</div>
+            <div class="card grid g3" style="gap:16px 24px;margin-bottom:18px">
+              <div><div class="field-lbl">Género</div><div style="font:600 13px var(--sans);color:var(--text-2)">Masculino</div></div>
+              <div><div class="field-lbl">Fecha de nacimiento</div><div style="font:600 13px var(--sans);color:var(--text-2)">14 mar 1987</div></div>
+              <div><div class="field-lbl">Estado civil</div><div class="dim" style="font:600 13px var(--sans)">+ Agregar</div></div>
+            </div>
+            <div class="section-lbl">Tu situación</div>
+            <div class="card grid g3" style="gap:16px 24px">
+              <div><div class="field-lbl">Nivel educativo</div><div style="font:600 13px var(--sans);color:var(--text-2)">Universitario</div></div>
+              <div><div class="field-lbl">Tipo de ingresos</div><div style="font:600 13px var(--sans);color:var(--text-2)">Independiente</div></div>
+              <div><div class="field-lbl">Vivienda</div><div class="dim" style="font:600 13px var(--sans)">+ Agregar</div></div>
+            </div>
+          </div>
+
+          <div class="ptab" data-p="documentos" hidden>
+            <div style="font:700 15px var(--sans);color:#fff;margin-bottom:4px">Documentos de tu cuenta</div>
+            <div class="muted" style="font-size:12.5px;margin-bottom:18px">Distinto a los documentos de cada crédito (esos viven dentro de cada inversión). Estos son los tuyos, y solo se piden una vez.</div>
+            <div class="list">
+              <div class="row"><div style="width:36px;height:44px;background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:4px;flex:none"></div>
+                <div class="rt"><div class="t">Documento de identidad</div><div class="s">Cédula por ambas caras</div></div>
+                <span class="stt ok"><span class="d"></span>Cargado 12 jul 2025</span><button class="btn sm">Reemplazar</button></div>
+              <div class="row"><div style="width:36px;height:44px;background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:4px;flex:none"></div>
+                <div class="rt"><div class="t">Certificado de ingresos o declaración de renta</div><div class="s">Del último año gravable, o firmado por tu contador</div></div>
+                <span class="stt mora"><span class="d"></span>Falta</span><button class="btn primary sm">Subir</button></div>
+              <div class="card">
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+                  <div style="width:36px;height:44px;background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:4px;flex:none"></div>
+                  <div style="flex:1"><div class="t" style="font:600 14px var(--sans)">Declaración de origen de fondos</div>
+                    <div class="s">Un solo documento estándar — se firma aquí, sin imprimir ni escanear</div></div>
+                  <span class="stt mora"><span class="d"></span>Pendiente de firma</span>
+                </div>
+                <div style="background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:14px 16px;font:400 12px/1.6 var(--sans);color:var(--muted);margin-bottom:12px">"Declaro que los fondos que destino a mis inversiones a través de aluri provienen de actividades lícitas…" <span class="teal">Ver el texto completo</span></div>
+                <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+                  <input type="checkbox" style="width:16px;height:16px;accent-color:var(--teal)">
+                  <span style="font:400 12.5px var(--sans);color:var(--muted-2)">He leído y acepto la declaración de origen de fondos</span></label>
+                <button class="btn primary block" data-toast="Documento firmado digitalmente">Firmar digitalmente</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ptab" data-p="cuentas" hidden>
+            <div id="cuentasList">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <div style="font:700 15px var(--sans);color:#fff">Cuentas bancarias</div>
+                <button class="btn primary sm" data-go="perfil-cuenta-nueva">+ Agregar cuenta</button>
+              </div>
+              <div class="muted" style="font-size:12.5px;margin-bottom:18px">Guarda tantas cuentas como quieras — propias o de un tercero — y elige entre ellas cada vez que fondees una inversión.</div>
+              <div class="list">
+                <div class="row sel"><div style="width:18px;height:18px;border-radius:50%;border:5px solid var(--teal);flex:none"></div>
+                  <div class="rt"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="t">Bancolombia · Ahorros</span><span class="badge teal">Tuya</span></div>
+                    <div class="s">Oscar Mauricio Zapata · CC 1018512472 · ••••1234 · Llave Bre-B: 315•••2035</div></div>
+                  <span class="badge teal">Predeterminada</span><button class="btn sm">Editar</button></div>
+                <div class="row"><div style="width:18px;height:18px;border-radius:50%;border:1px solid #33383b;flex:none"></div>
+                  <div class="rt"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="t">Davivienda · Corriente</span><span class="badge teal">Tuya</span></div>
+                    <div class="s">Oscar Mauricio Zapata · CC 1018512472 · ••••8890</div>
+                    <div style="font:500 11px var(--sans);color:var(--amber);margin-top:3px">Falta la llave Bre-B — es el canal por el que dispersamos</div></div>
+                  <button class="btn sm">Editar</button></div>
+                <div class="row"><div style="width:18px;height:18px;border-radius:50%;border:1px solid #33383b;flex:none"></div>
+                  <div class="rt"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="t">Nequi · Ahorros</span><span class="badge grey">De un tercero</span></div>
+                    <div class="s">María Fernanda Zapata · CC 52.884.112 · ••••4471</div></div>
+                  <button class="btn sm">Editar</button></div>
+              </div>
+            </div>
+
+            <div id="cuentaNueva" hidden>
+              <div class="back" data-back-cuentas>← Volver a cuentas bancarias</div>
+              <div style="font:700 18px var(--sans);color:#fff;margin-bottom:18px">Agregar cuenta bancaria</div>
+              <div class="field-lbl" style="font-size:13px;color:var(--muted-2)">¿Es una cuenta a tu nombre?</div>
+              <div style="display:flex;gap:8px;margin-bottom:22px" id="ownToggle">
+                <div class="chip on" data-own="mia">Sí, es mía</div>
+                <div class="chip" data-own="tercero">No, es de un tercero</div>
+              </div>
+              <div class="card" style="font:400 12px/1.5 var(--sans);color:var(--muted);margin-bottom:20px" id="ownHint">Como es tuya, ya tenemos tu nombre y cédula en tu perfil — solo necesitamos tu llave Bre-B.</div>
+              <div class="grid" style="gap:14px;max-width:520px">
+                <div><div class="field-lbl">Nombre del titular</div><div class="field" id="fTitular">Oscar Mauricio Zapata (de tu perfil)</div></div>
+                <div><div class="field-lbl">Cédula del titular</div><div class="field" id="fCedula">CC 1018512472 (de tu perfil)</div></div>
+                <div><div class="field-lbl">Llave Bre-B <span class="teal" style="text-transform:none;font-weight:600">· obligatoria</span></div>
+                  <input class="field" placeholder="Celular o correo asociado a la llave"><div class="field-hint">Este es el canal por el que dispersamos tus pagos.</div></div>
+                <div class="grid g2" style="gap:14px">
+                  <div><div class="field-lbl">Banco</div><div class="field select">Seleccionar banco ▾</div></div>
+                  <div><div class="field-lbl">Tipo de cuenta</div><div class="field select">Ahorros / Corriente ▾</div></div>
+                </div>
+                <div><div class="field-lbl">Número de cuenta <span class="dim" style="text-transform:none;font-weight:400">(de respaldo, opcional)</span></div><input class="field"></div>
+              </div>
+              <button class="btn primary" style="margin-top:22px" data-toast="Cuenta guardada" data-back-cuentas>Guardar cuenta</button>
+            </div>
+          </div>
+
+          <div class="ptab" data-p="seguridad" hidden>
+            <div style="font:700 15px var(--sans);color:#fff;margin-bottom:4px">Contraseña</div>
+            <div class="muted" style="font-size:12px;margin-bottom:14px">Última actualización: 3 meses atrás</div>
+            <div class="card" style="margin-bottom:26px">
+              <div class="grid" style="gap:12px">
+                <div><div class="field-lbl">Contraseña actual</div><div class="field">••••••••••</div></div>
+                <div class="grid g2" style="gap:14px">
+                  <div><div class="field-lbl">Nueva contraseña</div><div class="field">••••••••••</div></div>
+                  <div><div class="field-lbl">Confirmar nueva contraseña</div><div class="field">••••••••••</div></div>
+                </div>
+              </div>
+              <button class="btn primary block" style="margin-top:16px" data-toast="Contraseña actualizada">Actualizar contraseña</button>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <div style="font:700 15px var(--sans);color:#fff">Verificación en dos pasos</div>
+              <div class="toggle" id="tfaToggle"><i></i></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+              <span style="width:6px;height:6px;border-radius:50%;background:var(--amber)" id="tfaDot"></span>
+              <span style="font:500 12px var(--sans);color:var(--muted-2)" id="tfaState">Desactivada — la recomendamos para proteger tu inversión</span>
+            </div>
+            <div class="card" style="margin-bottom:26px;font:400 12.5px/1.6 var(--sans);color:var(--muted)" id="tfaBody">
+              Al activarla, te pediremos un código adicional (por SMS o una app de autenticación) cada vez que inicies sesión desde un dispositivo nuevo.
+            </div>
+
+            <div style="font:700 15px var(--sans);color:#fff;margin-bottom:4px">Sesiones activas</div>
+            <div class="muted" style="font-size:12px;margin-bottom:14px">Dispositivos donde tu cuenta está actualmente conectada.</div>
+            <div class="list" style="margin-bottom:22px">
+              <div class="row"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none"></span>
+                <div class="rt"><div class="t" style="font-size:13px">Chrome en macOS <span style="color:var(--teal-soft);font-weight:500">· Este dispositivo</span></div><div class="s">Bogotá, Colombia · activa ahora</div></div></div>
+              <div class="row"><span style="width:6px;height:6px;border-radius:50%;background:#525a5f;flex:none"></span>
+                <div class="rt"><div class="t" style="font-size:13px">App aluri en iPhone</div><div class="s">Barranquilla, Colombia · hace 2 días</div></div>
+                <button class="btn sm" data-toast="Sesión cerrada">Cerrar sesión</button></div>
+            </div>
+            <button class="btn block" style="margin-bottom:20px" data-toast="Se cerraron las demás sesiones">Cerrar todas las demás sesiones</button>
+            <div style="height:1px;background:var(--line);margin-bottom:18px"></div>
+            <div style="text-align:center"><button class="btn" style="border:0" data-toast="Sesión cerrada en este dispositivo">Cerrar sesión en este dispositivo</button></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div></main>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div class="backdrop" id="mdContact">
+  <div class="modal">
+    <div class="mh"><div style="font:700 19px var(--sans);color:#fff">Contactar a aluri</div><div class="x" data-close>✕</div></div>
+    <div class="muted" style="font-size:12.5px;margin-bottom:20px" id="contactSub">Sobre tu inversión</div>
+    <div class="list">
+      <div class="opt-row"><div class="ic">IA</div><div style="flex:1"><div style="font:600 13.5px var(--sans)">Hablar con el asistente de aluri</div><div class="muted" style="font-size:11.5px">Respuesta inmediata, 24/7</div></div><span class="dim">›</span></div>
+      <div class="opt-row"><div class="ic" style="font-size:15px">@</div><div style="flex:1"><div style="font:600 13.5px var(--sans)">Escribir un correo</div><div class="muted" style="font-size:11.5px">Te respondemos en menos de 24 horas</div></div><span class="dim">›</span></div>
+      <div class="opt-row"><div class="ic" style="font-size:10px">TEL</div><div style="flex:1"><div style="font:600 13.5px var(--sans)">Llamar a un asesor</div><div class="muted" style="font-size:11.5px">L-V 8am–6pm · +57 1 800 000 0000</div></div><span class="dim">›</span></div>
+    </div>
+    <div class="dim" style="font-size:11px;text-align:center;margin-top:16px">Un humano siempre está disponible, sin importar cuál elijas.</div>
+  </div>
+</div>
+
+<div class="backdrop" id="mdExtract">
+  <div class="modal lg">
+    <div class="mh"><div style="font:600 13px var(--sans);color:var(--muted-2)">Vista previa del extracto</div>
+      <div style="display:flex;gap:10px;align-items:center"><button class="btn primary sm" data-toast="Descargando PDF…">Descargar PDF</button><div class="x" data-close>✕</div></div></div>
+    <div class="paper" style="margin-top:10px">
+      <div class="ph-hd">
+        <div><h4>aluri<span>.</span></h4><div style="font:600 15px var(--sans);margin-top:10px">Extracto de inversión</div>
+          <div style="font:400 11.5px var(--sans);color:#84827a">Crédito CR005 · Hugo Sebastián Lozano</div></div>
+        <div style="text-align:right"><div style="font:400 11px var(--sans);color:#84827a">Período</div><div style="font:600 12.5px var(--sans)">01 – 31 ago 2026</div>
+          <div style="font:400 10.5px var(--sans);color:#a9a79c;margin-top:4px">Generado 28 ago 2026</div></div>
+      </div>
+      <div style="font:400 11.5px var(--sans);color:#5c5a52;margin-bottom:16px">Inversionista: Oscar Mauricio Zapata · Garantía: Casa, Chía · Plazo: 24 meses · Tasa: 34.5% E.A. neta · Desembolso: 22 jul 2025</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px">
+        <div><div style="font:600 9.5px var(--sans);color:#84827a;text-transform:uppercase">Monto invertido</div><div style="font:700 15px var(--sans);margin-top:3px">$60.000.000</div></div>
+        <div><div style="font:600 9.5px var(--sans);color:#84827a;text-transform:uppercase">Cuotas pagadas</div><div style="font:700 15px var(--sans);margin-top:3px">13 / 24</div></div>
+        <div><div style="font:600 9.5px var(--sans);color:#84827a;text-transform:uppercase">Capital recuperado</div><div style="font:700 15px var(--sans);margin-top:3px">$0</div></div>
+        <div><div style="font:600 9.5px var(--sans);color:#84827a;text-transform:uppercase">Recibido hasta hoy</div><div style="font:700 15px var(--sans);margin-top:3px;color:#0f6a5b">$18.876.000</div></div>
+        <div><div style="font:600 9.5px var(--sans);color:#84827a;text-transform:uppercase">Saldo pendiente</div><div style="font:700 15px var(--sans);margin-top:3px">$60.000.000</div></div>
+      </div>
+      <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px">Historial de movimientos</div>
+      <table>
+        <thead><tr><th>Fecha</th><th>Concepto</th><th>Interés</th><th>Deducc.</th><th>Neto</th><th>Acumulado</th></tr></thead>
+        <tbody id="extractRows"></tbody>
+      </table>
+      <div style="margin-top:22px;padding-top:12px;border-top:1px solid #e3e0d5;display:flex;justify-content:space-between;font:400 10px var(--sans);color:#a9a79c">
+        <div>aluri s.a.s. · NIT 900.123.456-1 · Este extracto es informativo y no constituye un título valor.</div><div>Página 1/1</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+  .pnav{font:600 13px var(--sans);color:var(--muted-2);padding:10px 14px;border-radius:9px;cursor:pointer}
+  .pnav:hover{color:var(--text-2)}
+  .pnav.active{color:#0e1113;background:var(--teal)}
+  @media(max-width:760px){
+    #perfilLayout{grid-template-columns:1fr!important}
+    #perfilNav{flex-direction:row!important;flex-wrap:wrap}
+    .wrap{padding:24px 18px 70px}
+  }
+</style>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+  /* ---------- data ---------- */
+  var OPPS=[
+    {city:'Local comercial · Guadalajara de Buga',risk:'B1',rate:'29.08%',pct:41,left:'$26.550.000',g:'1.7×',pl:'46m'},
+    {city:'Casa · Bogotá',risk:'B1',rate:'28.32%',pct:32,left:'$30.600.000',g:'1.7×',pl:'48m',feat:true},
+    {city:'Casa · Ricaurte',risk:'A2',rate:'26.82%',pct:78,left:'$9.900.000',g:'2×',pl:'48m'},
+    {city:'Apartamento · Chía',risk:'B1',rate:'29.40%',pct:12,left:'$44.000.000',g:'1.8×',pl:'60m'},
+    {city:'Bodega · Medellín',risk:'A1',rate:'24.10%',pct:64,left:'$18.200.000',g:'2.2×',pl:'36m'},
+    {city:'Casa · Cali',risk:'B2',rate:'31.05%',pct:8,left:'$52.000.000',g:'1.6×',pl:'54m'}
+  ];
+  var CREDITS={
+    CR005:{name:'Hugo Sebastián Lozano',prop:'Casa · Chía, Cundinamarca',status:'mora',statusLabel:'En mora',badgeClass:'amber'},
+    CR047:{name:'Benjamín Rodríguez',prop:'Local comercial · Guadalajara de Buga',status:'ok',statusLabel:'Al día',badgeClass:'teal'}
+  };
+
+  /* ---------- marketplace cards ---------- */
+  $('#mkt-cards').innerHTML=OPPS.map(function(o){return ''+
+    '<div class="card" style="padding:0;overflow:hidden;'+(o.feat?'border-color:var(--teal)':'')+'">'+
+      '<div class="ph" style="height:150px;border-radius:0;position:relative;align-items:flex-start;padding:10px">foto inmueble'+
+        '<span style="position:absolute;top:10px;left:10px;font:700 11px var(--sans);color:var(--text-2);background:rgba(10,12,13,.75);padding:4px 9px;border-radius:6px">Riesgo '+o.risk+'</span>'+
+        '<span style="position:absolute;top:10px;right:10px;font:800 18px var(--sans);color:var(--teal);background:rgba(10,12,13,.75);padding:4px 10px;border-radius:6px">'+o.rate+'</span>'+
+      '</div>'+
+      '<div style="padding:16px 18px">'+
+        '<div style="font:600 14px var(--sans)">'+o.city+'</div>'+
+        '<div style="margin:12px 0 6px" class="bar"><i style="width:'+o.pct+'%"></i></div>'+
+        '<div style="display:flex;justify-content:space-between;font:400 11.5px var(--sans);color:var(--muted);margin-bottom:12px"><span>'+o.pct+'% fondeado</span><span>quedan '+o.left+'</span></div>'+
+        '<div style="display:flex;justify-content:space-between;font:400 12px var(--sans);color:var(--muted);margin-bottom:14px"><span>Garantía <b style="color:var(--text-2)">'+o.g+'</b></span><span>Plazo <b style="color:var(--text-2)">'+o.pl+'</b></span></div>'+
+        '<button class="btn primary block" data-invest="'+o.city+'">Invertir</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  /* ---------- router ---------- */
+  function show(view){
+    $$('.view').forEach(function(v){v.classList.remove('active')});
+    var el=$('#v-'+view); if(el){el.classList.add('active')}
+    $$('#nav a').forEach(function(a){a.classList.toggle('active',a.dataset.go===view)});
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var go=e.target.closest('[data-go]');
+    if(go){
+      var v=go.dataset.go;
+      if(v==='perfil-cuenta-nueva'){show('perfil');profileTab('cuentas');cuentas(true);return;}
+      show(v); return;
+    }
+    var t=e.target.closest('[data-toast]');
+    if(t){toast(t.dataset.toast);}
+  });
+
+  /* ---------- toast ---------- */
+  var tEl=$('#toast'),tTo;
+  function toast(msg){tEl.textContent=msg;tEl.classList.add('show');clearTimeout(tTo);tTo=setTimeout(function(){tEl.classList.remove('show')},2200);}
+
+  /* ---------- fondeo wizard ---------- */
+  var money=function(n){return '$'+n.toLocaleString('es-CO')};
+  function project(m){
+    var months=48, gain=Math.round(m*1.008), monthly=Math.round(m*0.021);
+    $('#montoBig').textContent=m.toLocaleString('es-CO');
+    $('#projHdr').textContent='Con '+money(m)+' durante '+months+' meses';
+    $('#projMes').textContent='≈ '+money(monthly);
+    $('#projGan').textContent=money(gain);
+    $('#projFin').textContent=money(m+gain);
+    $('#confMonto').textContent=money(m);
+  }
+  $$('#montoChips .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      $$('#montoChips .chip').forEach(function(x){x.classList.remove('on')});
+      c.classList.add('on'); project(parseInt(c.dataset.m,10));
+    });
+  });
+  function wizard(step){
+    $$('#v-fondeo .step').forEach(function(s){s.classList.toggle('active',s.dataset.step==step)});
+    $$('#wsteps .st').forEach(function(s){
+      var n=parseInt(s.dataset.s,10);
+      s.classList.toggle('on',n==step); s.classList.toggle('done',n<step);
+    });
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var n=e.target.closest('[data-next]'); if(n){wizard(n.dataset.next);}
+    var p=e.target.closest('[data-prev]'); if(p){wizard(p.dataset.prev);}
+    var inv=e.target.closest('[data-invest]');
+    if(inv){ show('fondeo'); wizard(1);
+      $$('#montoChips .chip').forEach(function(x){x.classList.toggle('on',x.dataset.m==='10000000')});
+      project(10000000);
+      $('#v-fondeo .h1').textContent='Invertir · '+inv.dataset.invest;
+    }
+  });
+
+  /* ---------- credit detail ---------- */
+  var scheduleRows=[
+    {n:1,d:'23 jul 2025',amt:'$1.492.000',st:'ok',lbl:'Pagada'},
+    {n:2,d:'23 ago 2025',amt:'$1.492.000',st:'ok',lbl:'Pagada',open:true},
+    {n:3,d:'23 sep 2025',amt:'$1.492.000',st:'ok',lbl:'Pagada'},
+    {n:13,d:'23 jul 2026',amt:'$1.492.000',st:'ok',lbl:'Pagada'},
+    {n:14,d:'23 ago 2026',amt:'$1.492.000',st:'pend',lbl:'Pendiente'},
+    {n:24,d:'23 jun 2027',amt:'$61.492.000',st:'pend',lbl:'Pendiente'}
+  ];
+  function renderAbonos(){
+    $('#abonoRows').innerHTML=scheduleRows.map(function(r){
+      var breakdown=r.open?(
+        '<div class="grid g4" style="gap:14px;padding:4px 16px 16px 42px">'+
+          '<div><div class="field-lbl">Interés</div><div style="font:600 13px var(--sans);color:#c8ccce">$1.500.000</div></div>'+
+          '<div><div class="field-lbl">Capital</div><div style="font:600 13px var(--sans);color:#c8ccce">$0</div></div>'+
+          '<div><div class="field-lbl">Dispersión</div><div style="font:600 13px var(--sans);color:var(--muted)">– $6.000</div></div>'+
+          '<div><div class="field-lbl">Costo de giro</div><div style="font:600 13px var(--sans);color:var(--muted)">– $2.000</div></div>'+
+        '</div>'):'';
+      return '<div class="card" style="padding:0;'+(r.open?'border-color:var(--teal)':'')+(r.st==='pend'?';opacity:.6':'')+'">'+
+        '<div style="display:grid;grid-template-columns:.5fr 1fr 1fr 1fr .4fr;align-items:center;padding:12px 16px;cursor:pointer" data-toggle-row="'+r.n+'">'+
+          '<div class="muted" style="font-size:13px">'+r.n+'</div>'+
+          '<div style="font:600 13px var(--sans);color:var(--text-2)">'+r.d+'</div>'+
+          '<div style="font:700 14px var(--sans)">'+r.amt+'</div>'+
+          '<div><span class="stt '+r.st+'"><span class="d"></span>'+r.lbl+'</span></div>'+
+          '<div class="teal" style="text-align:right;font:600 12px var(--sans)">'+(r.open?'︿':'···')+'</div>'+
+        '</div>'+breakdown+'</div>';
+    }).join('');
+  }
+  document.addEventListener('click',function(e){
+    var tr=e.target.closest('[data-toggle-row]');
+    if(tr){var n=parseInt(tr.dataset.toggleRow,10);
+      scheduleRows.forEach(function(r){if(r.n===n)r.open=!r.open;}); renderAbonos();}
+  });
+
+  var DOCS=[
+    ['Contrato de mutuo con garantía hipotecaria','Entre tú y {name} (deudor) — define el préstamo, la tasa y el plazo','Firmado 20 jul 2025'],
+    ['Escritura pública de hipoteca','Constituida ante la Notaría 5 de Bogotá — inscribe la garantía sobre el inmueble','Firmada 22 jul 2025'],
+    ['Contrato de administración y servicios tecnológicos','Entre tú y aluri — administración del crédito, cobranza y comisión tecnológica','Firmado 15 jul 2025'],
+    ['Certificado de libertad y tradición','Expedido por la Oficina de Registro — confirma la hipoteca inscrita','Registrado 5 ago 2025']
+  ];
+  function renderDocs(name){
+    $('#docRows').innerHTML=DOCS.map(function(d){
+      return '<div class="row"><div style="width:38px;height:46px;background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:4px;flex:none"></div>'+
+        '<div class="rt"><div class="t">'+d[0]+'</div><div class="s">'+d[1].replace('{name}',name)+'</div></div>'+
+        '<span class="stt ok"><span class="d"></span>'+d[2]+'</span>'+
+        '<div style="display:flex;gap:8px"><button class="btn sm">Ver</button><button class="btn primary sm">Descargar</button></div></div>';
+    }).join('');
+  }
+
+  function openCredit(id){
+    var c=CREDITS[id]||CREDITS.CR005;
+    $('#cr-name').textContent=c.name;
+    $('#cr-prop').textContent=c.prop;
+    $('#cr-badges').innerHTML='<span class="badge teal">'+id+'</span><span class="badge '+c.badgeClass+'">'+c.statusLabel+'</span>';
+    var cobTab=$('#cr-tabs .tab[data-t="cobranza"]');
+    cobTab.style.display=(c.status==='mora')?'':'none';
+    renderAbonos(); renderDocs(c.name);
+    creditTab('detalles');
+    $('#cr-contact').onclick=function(){$('#contactSub').textContent='Sobre tu inversión '+id;openModal('#mdContact')};
+    $('#cr-extract').onclick=function(){openModal('#mdExtract')};
+    show('credito');
+  }
+  function creditTab(t){
+    $$('#cr-tabs .tab').forEach(function(x){x.classList.toggle('active',x.dataset.t===t)});
+    $$('#v-credito .ctab').forEach(function(x){x.hidden=(x.dataset.tab!==t)});
+  }
+  $$('#cr-tabs .tab').forEach(function(x){x.addEventListener('click',function(){creditTab(x.dataset.t)})});
+  document.addEventListener('click',function(e){
+    var r=e.target.closest('[data-credit]'); if(r){openCredit(r.dataset.credit);}
+  });
+
+  /* abonos crono/pagos toggle (visual) */
+  $$('#abonoToggle .chip').forEach(function(c){
+    c.addEventListener('click',function(){$$('#abonoToggle .chip').forEach(function(x){x.classList.remove('on')});c.classList.add('on');});
+  });
+
+  /* ---------- firma mode ---------- */
+  $$('#firmaMode .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      $$('#firmaMode .chip').forEach(function(x){x.classList.remove('on')});c.classList.add('on');
+      $$('[data-firma]').forEach(function(b){b.hidden=(b.dataset.firma!==c.dataset.mode)});
+    });
+  });
+
+  /* ---------- perfil ---------- */
+  function profileTab(p){
+    $$('#perfilNav .pnav').forEach(function(x){x.classList.toggle('active',x.dataset.p===p)});
+    $$('#v-perfil .ptab').forEach(function(x){x.hidden=(x.dataset.p!==p)});
+  }
+  $$('#perfilNav .pnav').forEach(function(x){x.addEventListener('click',function(){profileTab(x.dataset.p);if(x.dataset.p==='cuentas')cuentas(false);})});
+
+  function cuentas(showNew){
+    $('#cuentasList').hidden=!!showNew;
+    $('#cuentaNueva').hidden=!showNew;
+  }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('[data-back-cuentas]')){cuentas(false);}
+  });
+  $$('#ownToggle .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      $$('#ownToggle .chip').forEach(function(x){x.classList.remove('on')});c.classList.add('on');
+      var mia=c.dataset.own==='mia';
+      $('#ownHint').textContent=mia
+        ? 'Como es tuya, ya tenemos tu nombre y cédula en tu perfil — solo necesitamos tu llave Bre-B.'
+        : 'Como es de otra persona, necesitamos sus datos completos y su llave Bre-B para poder girarle.';
+      $('#fTitular').textContent=mia?'Oscar Mauricio Zapata (de tu perfil)':'';
+      $('#fCedula').textContent=mia?'CC 1018512472 (de tu perfil)':'';
+      $('#fTitular').contentEditable=$('#fCedula').contentEditable=(!mia);
+    });
+  });
+
+  /* ---------- 2FA toggle ---------- */
+  var tfaOn=false;
+  $('#tfaToggle').addEventListener('click',function(){
+    tfaOn=!tfaOn;
+    this.classList.toggle('on',tfaOn);
+    $('#tfaDot').style.background=tfaOn?'var(--teal)':'var(--amber)';
+    $('#tfaState').textContent=tfaOn?'Activada — tu cuenta está protegida':'Desactivada — la recomendamos para proteger tu inversión';
+    $('#tfaBody').innerHTML=tfaOn
+      ? '<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><div style="width:96px;height:96px;background:repeating-linear-gradient(0deg,#0e1113 0 4px,#e7eaec 4px 8px),repeating-linear-gradient(90deg,#0e1113 0 4px,#e7eaec 4px 8px);background-blend-mode:difference;border-radius:8px;flex:none"></div><div style="flex:1;min-width:200px">Escanea este código con Google Authenticator o Authy, y luego ingresa el código de 6 dígitos para confirmar.<div style="margin-top:10px;display:flex;gap:8px"><input class="field" style="max-width:140px" placeholder="000000"><button class="btn primary sm" data-toast="2FA confirmada">Confirmar</button></div></div></div>'
+      : 'Al activarla, te pediremos un código adicional (por SMS o una app de autenticación) cada vez que inicies sesión desde un dispositivo nuevo.';
+  });
+
+  /* ---------- modals ---------- */
+  function openModal(sel){$(sel).classList.add('open');}
+  function closeModal(){$$('.backdrop').forEach(function(b){b.classList.remove('open')});}
+  document.addEventListener('click',function(e){
+    if(e.target.closest('[data-close]')) closeModal();
+    if(e.target.classList.contains('backdrop')) closeModal();
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+  /* extracto rows */
+  (function(){
+    var rows='',acc=0;
+    for(var i=1;i<=14;i++){
+      var neto=(i<=13)?1452000:null; if(neto)acc+=neto;
+      rows+='<tr><td>'+i+' — 2025/26</td><td>Cuota #'+i+(i<=13?' — interés corriente':' — pendiente')+'</td><td>$1.500.000</td><td>–$48.000</td><td>'+(neto?'$1.452.000':'—')+'</td><td>'+(neto?('$'+acc.toLocaleString('es-CO')):'—')+'</td></tr>';
+    }
+    $('#extractRows').innerHTML=rows;
+  })();
+
+  /* initial */
+  project(10000000); renderAbonos();
+})();
+</script>
+</body>
+</html>
